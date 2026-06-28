@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="split-screen" [dir]="isArabic ? 'rtl' : 'ltr'">
+      <!-- Left Sidebar (Blue Branding Section) -->
       <div class="left-section">
         <div class="brand-logo">PS</div>
         <div class="illustration-container">
@@ -33,9 +34,11 @@ import { FormsModule } from '@angular/forms';
           <span *ngFor="let s of slides; let i = index" class="dot" [class.active]="i === currentSlide" (click)="setSlide(i)"></span>
         </div>
       </div>
+
+      <!-- Right Section (Form) -->
       <div class="right-section">
         <div class="lang-selector" (click)="toggleLanguage()">
-          <svg class="icon-svg color-navy" viewBox="0 0 24 24"><path d="M12.003 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zm0-2a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm-5.5-7h11M12.003 4.5v15M12.003 5.5c2 2.5 2 8.5 0 11m0-11c-2 2.5-2 8.5 0 11"/></svg>
+          <svg class="icon-svg color-gray" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg>
           <span>{{ isArabic ? 'English' : 'العربية' }}</span>
         </div>
         <div class="form-wrapper">
@@ -44,7 +47,7 @@ import { FormsModule } from '@angular/forms';
             <div class="input-group">
               <label for="mobile">{{ isArabic ? 'رقم الجوال' : 'Mobile Number' }}</label>
               <div class="input-with-icon">
-                <svg class="icon-svg color-gray" viewBox="0 0 24 24"><path d="M6.62 10.79a15.15 15.15 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.27c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.26 1.02l-2.2 2.2z"/></svg>
+                <svg class="icon-svg color-gray" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 <span class="country-code">+966</span>
                 <input id="mobile" type="text" [(ngModel)]="mobileNumber" name="mobileNumber" placeholder="5xxxxxxxx" required />
               </div>
@@ -53,11 +56,7 @@ import { FormsModule } from '@angular/forms';
               <label for="password">{{ isArabic ? 'كلمة المرور' : 'Password' }}</label>
               <div class="input-with-icon">
                 <svg class="icon-svg color-gray" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                <input id="password" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" placeholder="••••••••" required />
-                <span class="toggle-password" (click)="showPassword = !showPassword">
-                  <svg *ngIf="showPassword" class="icon-svg color-blue" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8zm11 5a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/></svg>
-                  <svg *ngIf="!notShowPassword" class="icon-svg color-gray" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg>
-                </span>
+                <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="••••••••" required />
               </div>
               <a href="#" class="forgot-link">{{ isArabic ? 'نسيت كلمة المرور؟' : 'Forgot Password?' }}</a>
             </div>
@@ -101,12 +100,9 @@ import { FormsModule } from '@angular/forms';
     .input-with-icon { display: flex; align-items: center; background-color: #f9fafb; border: 1px solid var(--border-light); border-radius: 8px; padding: 0 14px; height: 50px; }
     .icon-svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .color-gray { color: #9ca3af; }
-    .color-blue { color: #0066ff; }
-    .color-navy { color: #0a1931; }
     [dir="rtl"] .icon-svg { margin-left: 10px; } [dir="ltr"] .icon-svg { margin-right: 10px; }
     [dir="rtl"] .country-code { margin-left: 12px; } [dir="ltr"] .country-code { margin-right: 12px; }
     .input-with-icon input { flex: 1; border: none; background: transparent; height: 100%; font-size: 15px; outline: none; }
-    .toggle-password { cursor: pointer; display: flex; align-items: center; }
     .forgot-link { display: block; font-size: 13px; color: var(--text-gray); text-decoration: none; margin-top: 8px; }
     [dir="rtl"] .forgot-link { text-align: left; } [dir="ltr"] .forgot-link { text-align: right; }
     .submit-btn { width: 100%; height: 50px; background-color: var(--dark-navy); color: #ffffff; border: none; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 25px; }
@@ -124,3 +120,13 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() { this.startSlider(); }
   ngOnDestroy() { if (this.slideTimer) { clearInterval(this.slideTimer); } }
   startSlider() { this.slideTimer = setInterval(() => { this.currentSlide = (this.currentSlide + 1) % this.slides.length; }, 4000); }
+  setSlide(index: number) { this.currentSlide = index; clearInterval(this.slideTimer); this.startSlider(); }
+  toggleLanguage() { this.isArabic = !this.isArabic; }
+  onLogin() {
+    if (this.mobileNumber === '538403218' && this.password === 'admin123') {
+      this.isSuccess = true; this.feedbackMessage = this.isArabic ? 'تم تسجيل الدخول بنجاح!' : 'Login Successful! Access Granted.';
+    } else {
+      this.isSuccess = false; this.feedbackMessage = this.isArabic ? 'خطأ في البيانات الحقلية.' : 'Incorrect credentials. Please verify data inputs.';
+    }
+  }
+}
