@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+/* إلغاء ومنع أشرطة التمرير على مستوى المتصفح بالكامل */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
