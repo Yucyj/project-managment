@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,14 +12,11 @@ import { FormsModule } from '@angular/forms';
     <div class="split-screen" [dir]="isArabic ? 'rtl' : 'ltr'">
       <div class="left-section">
         <div class="brand-logo">PS</div>
-        
         <div class="illustration-container">
           <img src="dashboard.png" alt="Project Dashboard" class="main-project-img" />
         </div>
-
         <h1 class="headline">{{ slides[currentSlide].title }}</h1>
         <p class="description">{{ slides[currentSlide].desc }}</p>
-        
         <div class="slider-dots">
           <span *ngFor="let s of slides; let i = index" class="dot" [class.active]="i === currentSlide" (click)="setSlide(i)"></span>
         </div>
@@ -65,7 +64,6 @@ import { FormsModule } from '@angular/forms';
   `,
   styles: [`
     :host { --primary-blue: #0066ff; --dark-navy: #111827; --text-gray: #6b7280; --border-light: #e5e7eb; }
-    
     html, body { margin: 0 !important; padding: 0 !important; height: 100vh !important; max-height: 100vh !important; overflow: hidden !important; }
     .split-screen { display: flex; height: 100vh; max-height: 100vh; overflow: hidden !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background-color: #ffffff; }
     .left-section { flex: 1; background-color: var(--primary-blue); color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; position: relative; overflow: hidden !important; height: 100vh; box-sizing: border-box; }
@@ -112,15 +110,20 @@ export class AppComponent implements OnInit, OnDestroy {
   isSuccess = false; 
   currentSlide = 0; 
   slideTimer: any;
-
+  
   slides = [
-    { title: 'Control Every Project From One Place', desc: 'Track performance, assign responsibilities, and keep every workflow aligned efficiently.' },
-    { title: 'Real-time Workflow Validation', desc: 'Monitor team progress and secure system entry points seamlessly from any dashboard.' },
-    { title: 'Optimize Team Resource Distribution', desc: 'Ensure balanced operational loads and accelerate technical feature delivery.' }
+    { title: 'Control Every Project From One Place', desc: 'Track performance, assign responsibilities, and keep every workflow aligned efficiently.' }
   ];
 
+  constructor(private authService: AuthService, private router: Router) {}
+
   ngOnInit() { this.startSlider(); }
-  ngOnDestroy() { if (this.slideTimer) { clearInterval(this.slideTimer); } }
+  
+  ngOnDestroy() { 
+    if (this.slideTimer) { 
+      clearInterval(this.slideTimer); 
+    } 
+  }
   
   startSlider() { 
     this.slideTimer = setInterval(() => { 
@@ -135,14 +138,39 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   
   toggleLanguage() { this.isArabic = !this.isArabic; }
-  
+
   onLogin() {
-    if (this.mobileNumber === '538403218' && this.password === 'admin123') {
-      this.isSuccess = true; 
-      this.feedbackMessage = this.isArabic ? 'تم تسجيل الدخول بنجاح!' : 'Login Successful! Access Granted.';
-    } else {
-      this.isSuccess = false; 
-      this.feedbackMessage = this.isArabic ? 'خطأ في البيانات الحقلية.' : 'Incorrect credentials. Please verify data inputs.';
-    }
+    this.feedbackMessage = 'Connecting to ProSync Server...';
+    this.isSuccess = true;
+
+    this.authService.loginToServer(this.mobileNumber, this.password).subscribe({
+      next: (response) => {
+        // Logs full structural execution data inside developer tools for trace monitoring
+        console.log('Full ProSync API Response Payload:', response);
+        
+        if (response && response.succeeded) {
+          this.isSuccess = true;
+          this.feedbackMessage = 'Login Successful! Redirecting...';
+          
+          // Persistence management capturing user state identities across sessions
+          const userName = response.data.userName;
+          localStorage.setItem('username', userName);
+          
+          // Standard redirection path execution targeting the verified route segments
+          setTimeout(() => {
+            this.router.navigateByUrl('/dashboard/index');
+          }, 1000);
+        } else {
+          this.isSuccess = false;
+          this.feedbackMessage = response.message || 'Login failed.';
+        }
+      },
+      error: (error) => {
+        // Fallback error logging capturing CORS protocol block parameters directly from the browser sandbox
+        console.error('API Server Error response stream checkpoint:', error);
+        this.isSuccess = false;
+        this.feedbackMessage = 'Connection blocked or incorrect credentials. Review console layers.';
+      }
+    });
   }
 }
