@@ -6,8 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  // الرابط الكامل والدقيق طبقاً لكتيب السواجر أونلاين
-  private apiUrl = 'https://etmam.store';
+  private apiUrl = 'https://etmam.store/Isa/api/Auth/login';
 
   constructor(private http: HttpClient) {}
 
@@ -19,3 +18,6 @@ export class AuthService {
     return this.http.post(this.apiUrl, body);
   }
 }
+git add .
+git commit -m "API data stream integration"
+git push origin main
