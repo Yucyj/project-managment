@@ -57,7 +57,7 @@ import { Router } from '@angular/router';
               <span>{{ isArabic ? 'دخول' : 'Login' }}</span> <span>&rarr;</span>
             </button>
           </form>
-          <div *ngIf="feedbackMessage" [ngClass]="isSuccess ? 'msg-success' : 'msg-error'">{{ feedbackMessage }}</div>
+          <div *ngIf="feedbackMessage && !isSuccess" class="msg-error">{{ feedbackMessage }}</div>
         </div>
       </div>
     </div>
@@ -96,7 +96,6 @@ import { Router } from '@angular/router';
     .forgot-link-blue:hover { text-decoration: underline; }
     .submit-btn { width: 100%; height: 50px; background-color: #111827; color: #ffffff; border: none; border-radius: 25px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 25px; }
     .submit-btn:hover { background-color: #1f2937; }
-    .msg-success { background-color: #dcfce7; color: #166534; padding: 12px; border-radius: 8px; margin-top: 15px; text-align: center; font-size: 14px; }
     .msg-error { background-color: #fee2e2; color: #991b1b; padding: 12px; border-radius: 8px; margin-top: 15px; text-align: center; font-size: 14px; }
   `]
 })
@@ -140,33 +139,24 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleLanguage() { this.isArabic = !this.isArabic; }
 
   onLogin() {
-    this.feedbackMessage = 'Connecting to ProSync Server...';
-    this.isSuccess = true;
-
+    this.feedbackMessage = '';
+    this.isSuccess = false;   
+    
     this.authService.loginToServer(this.mobileNumber, this.password).subscribe({
-      next: (response) => {
-        // Logs full structural execution data inside developer tools for trace monitoring
+      next: (response: any) => {
         console.log('Full ProSync API Response Payload:', response);
         
         if (response && response.succeeded) {
           this.isSuccess = true;
-          this.feedbackMessage = 'Login Successful! Redirecting...';
-          
-          // Persistence management capturing user state identities across sessions
-          const userName = response.data.userName;
-          localStorage.setItem('username', userName);
-          
-          // Standard redirection path execution targeting the verified route segments
-          setTimeout(() => {
-            this.router.navigateByUrl('/dashboard/index');
-          }, 1000);
+          localStorage.setItem('username', response.data.userName);
+          localStorage.setItem('userphone', response.data.phoneNumber);
+          this.router.navigateByUrl('/dashboard/index');
         } else {
           this.isSuccess = false;
           this.feedbackMessage = response.message || 'Login failed.';
         }
       },
       error: (error) => {
-        // Fallback error logging capturing CORS protocol block parameters directly from the browser sandbox
         console.error('API Server Error response stream checkpoint:', error);
         this.isSuccess = false;
         this.feedbackMessage = 'Connection blocked or incorrect credentials. Review console layers.';
