@@ -18,6 +18,3 @@ export class AuthService {
     return this.http.post(this.apiUrl, body);
   }
 }
-git add .
-git commit -m "API data stream integration"
-git push origin main
