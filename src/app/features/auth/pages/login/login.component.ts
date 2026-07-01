@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="split-screen" [dir]="isArabic ? 'rtl' : 'ltr'">
+      <!-- الجانب الأيسر: الشعار والمحتوى البصري -->
       <div class="left-section">
         <div class="brand-logo">PS</div>
         <div class="illustration-container">
@@ -22,6 +23,7 @@ import { Router } from '@angular/router';
         </div>
       </div>
 
+      <!-- الجانب الأيمن: استمارة تسجيل الدخول الفعلية -->
       <div class="right-section">
         <div class="lang-selector" (click)="toggleLanguage()">
           <svg class="icon-svg color-navy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg>
@@ -64,7 +66,6 @@ import { Router } from '@angular/router';
   `,
   styles: [`
     :host { --primary-blue: #0066ff; --dark-navy: #111827; --text-gray: #6b7280; --border-light: #e5e7eb; }
-    html, body { margin: 0 !important; padding: 0 !important; height: 100vh !important; max-height: 100vh !important; overflow: hidden !important; }
     .split-screen { display: flex; height: 100vh; max-height: 100vh; overflow: hidden !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background-color: #ffffff; }
     .left-section { flex: 1; background-color: var(--primary-blue); color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; position: relative; overflow: hidden !important; height: 100vh; box-sizing: border-box; }
     .brand-logo { font-size: 64px; font-weight: bold; margin-bottom: 15px; font-family: 'Times New Roman', Times, serif; }
@@ -100,49 +101,22 @@ import { Router } from '@angular/router';
   `]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  mobileNumber = ''; 
-  password = ''; 
-  isArabic = false; 
-  showPassword = false; 
-  feedbackMessage = ''; 
-  isSuccess = false; 
-  currentSlide = 0; 
-  slideTimer: any;
-  
-  slides = [
-    { title: 'Control Every Project From One Place', desc: 'Track performance, assign responsibilities, and keep every workflow aligned efficiently.' }
-  ];
+  mobileNumber = ''; password = ''; isArabic = false; showPassword = false; feedbackMessage = ''; isSuccess = false; currentSlide = 0; slideTimer: any;
+  slides = [{ title: 'Control Every Project From One Place', desc: 'Track performance, assign responsibilities, and keep every workflow aligned efficiently.' }];
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() { this.startSlider(); }
-  
-  ngOnDestroy() { 
-    if (this.slideTimer) { 
-      clearInterval(this.slideTimer); 
-    } 
-  }
-  
-  startSlider() { 
-    this.slideTimer = setInterval(() => { 
-      this.currentSlide = (this.currentSlide + 1) % this.slides.length; 
-    }, 4000); 
-  }
-  
-  setSlide(index: number) { 
-    this.currentSlide = index; 
-    clearInterval(this.slideTimer); 
-    this.startSlider(); 
-  }
-  
+  ngOnDestroy() { if (this.slideTimer) { clearInterval(this.slideTimer); } }
+  startSlider() { this.slideTimer = setInterval(() => { this.currentSlide = (this.currentSlide + 1) % this.slides.length; }, 4000); }
+  setSlide(index: number) { this.currentSlide = index; clearInterval(this.slideTimer); this.startSlider(); }
   toggleLanguage() { this.isArabic = !this.isArabic; }
 
   onLogin() {
     this.feedbackMessage = '';
     this.isSuccess = false;
-
     this.authService.loginToServer(this.mobileNumber, this.password).subscribe({
-      next: (response: any) => {
+      next: (response) => {
         console.log('Full ProSync API Response Payload:', response);
         if (response && response.succeeded) {
           this.isSuccess = true;

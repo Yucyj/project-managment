@@ -1,0 +1,40 @@
+:host {
+  --primary-blue: #0066ff;
+  --dark-navy: #111827;
+  --text-gray: #6b7280;
+  --border-light: #e5e7eb;
+}
+
+html, body { margin: 0 !important; padding: 0 !important; height: 100vh !important; max-height: 100vh !important; overflow: hidden !important; }
+.split-screen { display: flex; height: 100vh; max-height: 100vh; overflow: hidden !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background-color: #ffffff; }
+.left-section { flex: 1; background-color: var(--primary-blue); color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; position: relative; overflow: hidden !important; height: 100vh; box-sizing: border-box; }
+.brand-logo { font-size: 64px; font-weight: bold; margin-bottom: 15px; font-family: 'Times New Roman', Times, serif; }
+.illustration-container { width: 100%; max-width: 290px; height: auto; max-height: 40vh; margin-bottom: 25px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+.main-project-img { width: 100%; height: auto; max-height: 100%; object-fit: contain; }
+.headline { font-size: 20px; font-weight: 800; margin: 0 0 10px 0; max-width: 440px; line-height: 1.4; letter-spacing: 0.3px; }
+.description { font-size: 15px; opacity: 0.85; margin: 0 0 20px 0; height: 45px; max-width: 400px; line-height: 1.6; font-weight: 400; }
+.slider-dots { display: flex; gap: 10px; }
+.slider-dots .dot { width: 12px; height: 12px; border: 1px solid white; border-radius: 50%; cursor: pointer; transition: background 0.3s; }
+.slider-dots .dot.active { background: white; }
+.right-section { flex: 1; display: flex; flex-direction: column; position: relative; padding: 40px; justify-content: center; overflow: hidden !important; height: 100vh; box-sizing: border-box; }
+.lang-selector { position: absolute; top: 40px; display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; font-weight: 600; }
+[dir="rtl"] .lang-selector { left: 60px; right: auto; } [dir="ltr"] .lang-selector { right: 60px; left: auto; }
+.form-wrapper { width: 100%; max-width: 400px; margin: 0 auto; }
+.form-title { font-size: 54px; font-weight: bold; color: var(--primary-blue); margin: 0 0 30px 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.input-group { margin-bottom: 20px; text-align: start; }
+.input-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #374151; font-weight: 500; }
+.input-with-icon { display: flex; align-items: center; background-color: #f9fafb; border: 1px solid var(--border-light); border-radius: 8px; padding: 0 14px; height: 50px; }
+.input-with-icon:focus-within { border-color: var(--primary-blue); background-color: #ffffff; }
+.icon-svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.color-gray { color: #9ca3af; } .color-blue { color: #0066ff; } .color-navy { color: #0a1931; }
+[dir="rtl"] .icon-svg { margin-left: 10px; } [dir="ltr"] .icon-svg { margin-right: 10px; }
+[dir="rtl"] .country-code { margin-left: 12px; } [dir="ltr"] .country-code { margin-right: 12px; }
+.input-with-icon input { flex: 1; border: none; background: transparent; height: 100%; font-size: 15px; outline: none; color: #111111; }
+.input-with-icon input::placeholder { color: #9ca3af; opacity: 0.8; }
+.toggle-password { cursor: pointer; display: flex; align-items: center; }
+.forgot-link-blue { display: block; font-size: 13px; color: var(--primary-blue); text-decoration: none; margin-top: 8px; font-weight: 500; }
+[dir="rtl"] .forgot-link-blue { text-align: left; } [dir="ltr"] .forgot-link-blue { text-align: right; }
+.forgot-link-blue:hover { text-decoration: underline; }
+.submit-btn { width: 100%; height: 50px; background-color: #111827; color: #ffffff; border: none; border-radius: 25px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 25px; }
+.submit-btn:hover { background-color: #1f2937; }
+.msg-error { background-color: #fee2e2; color: #991b1b; padding: 12px; border-radius: 8px; margin-top: 15px; text-align: center; font-size: 14px; }
