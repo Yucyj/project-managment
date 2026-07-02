@@ -1,1 +1,1 @@
-export const environment = { production: false, apiBaseUrl: 'https://etmam.store' }; 
+export const environment = { production: false, apiBaseUrl: 'https://etmam.store/isa/api' }; 
