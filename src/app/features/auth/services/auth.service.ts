@@ -6,8 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  // الرابط الصريح والمباشر المعتمد من السواجر لتشغيل النظام فوراً
-  private apiUrl = 'https://etmam.store';
+  private apiUrl = 'https://etmam.store/isa/api';
 
   constructor(private http: HttpClient) {}
 
