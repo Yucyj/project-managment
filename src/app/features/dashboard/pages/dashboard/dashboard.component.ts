@@ -6,158 +6,203 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="dashboard-container" [dir]="isArabic ? 'rtl' : 'ltr'">
-      
-      <!-- 📋 1. Left Sidebar Navigation Panel -->
-      <aside class="sidebar">
-        <div class="brand-zone">
-          <span class="logo-text">PS</span>
-          <button class="collapse-btn">⇦</button>
-        </div>
-        
-        <nav class="nav-menu">
-          <button class="nav-item active">📊 Dashboard</button>
-          <button class="nav-item">💼 Portfolios</button>
-          <button class="nav-item">📦 Programs</button>
-          <button class="nav-item">📁 Projects</button>
-          <button class="nav-item">🔄 Change Requests</button>
-          <button class="nav-item">📅 Plans</button>
-          <button class="nav-item">👥 Users</button>
-          <button class="nav-item">⚙️ Setting</button>
-        </nav>
-      </aside>
-
-      <!-- 🖥️ 2. Main Dashboard Operational Canvas Layout -->
-      <div class="main-canvas">
-        
-        <!-- Top Toolbar Utility Action Block -->
-        <header class="top-bar">
-          <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" [placeholder]="isArabic ? 'البحث عن أي شيء...' : 'Search for everything...'" />
-          </div>
-          
-          <div class="utility-actions">
-            <button class="lang-toggle" (click)="toggleLanguage()">
-              🌐 {{ isArabic ? 'English' : 'العربية' }}
-            </button>
-            
-            <!-- 👤 Live User Metrics Linked to Session State Storage Keys -->
-            <div class="user-profile">
-              <div class="avatar">👤</div>
-              <div class="user-info">
-                <span class="username">{{ userEmail }}</span>
-                <span class="role">{{ userPhone }}</span>
-              </div>
-            </div>
-
-            <button class="create-btn" (click)="onCreateNew()">+ Create New</button>
-          </div>
-        </header>
-
-        <!-- Main Content Area Panel Viewport -->
-        <main class="content-viewport">
-          <h2 class="view-title">Dashboard</h2>
-
-          <!-- 📊 3. Metric Summary Analytical Grid Layout -->
-          <div class="metrics-grid">
-            <div class="card">
-              <span class="card-label">Total Portfolio</span>
-              <h2 class="card-value">🗂️ 0</h2>
-            </div>
-            <div class="card">
-              <span class="card-label">Total Programs</span>
-              <h2 class="card-value">📦 0</h2>
-            </div>
-            <div class="card">
-              <span class="card-label">Total Projects</span>
-              <h2 class="card-value">📋 0</h2>
-            </div>
-            <div class="card">
-              <span class="card-label">Total Budget</span>
-              <h2 class="card-value">00 <small>{{ isArabic ? 'ر.س' : 'SAR' }}</small></h2>
-            </div>
-          </div>
-
-          <!-- 📭 4. Center Minimalist Alert Canvas (Empty State Placeholder) -->
-          <div class="empty-state-canvas">
-            <div class="empty-icon-circle">
-              <span class="pulse-dot"></span>
-            </div>
-            <h3>No data right now</h3>
-            <p>Please click on <strong>create new</strong> to choose the suitable option</p>
-          </div>
-        </main>
+    <!-- 🔍 Horizontal Search & Header Utility Create Block -->
+    <div class="search-and-action-row">
+      <div class="search-input-box">
+        <span class="search-lens">🔍</span>
+        <input type="text" placeholder="Search for everything" />
       </div>
+      <button class="action-create-btn" type="button">+ Crete New</button>
+    </div>
 
+    <!-- 📊 Summary Metric Block Parameter Cards Grid -->
+    <div class="cards-summary-grid">
+      <div class="metric-card">
+        <span class="card-label-text">Total Portfolio</span>
+        <div class="card-data-line">
+          <!-- Portfolio Folder SVG Graphic Shape Descriptor -->
+          <svg class="card-svg-icon yellow" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+          <strong class="card-value-text">0</strong>
+        </div>
+      </div>
+      
+      <div class="metric-card">
+        <span class="card-label-text">Total Programs</span>
+        <div class="card-data-line">
+          <!-- Program Block Component SVG Frame Graph -->
+          <svg class="card-svg-icon brown" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M22 8.5c0-.83-.67-1.5-1.5-1.5H3.5C2.67 7 2 7.67 2 8.5v11c0 .83.67 1.5 1.5 1.5h17c.83 0 1.5-.67 1.5-1.5v-11zM18 19H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V9h12v2zM12 2L2 6l10 4 10-4-10-4z"/></svg>
+          <strong class="card-value-text">0</strong>
+        </div>
+      </div>
+      
+      <div class="metric-card">
+        <span class="card-label-text">Total Projects</span>
+        <div class="card-data-line">
+          <!-- Project Document Blueprint SVG Component -->
+          <svg class="card-svg-icon blue" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          <strong class="card-value-text">0</strong>
+        </div>
+      </div>
+      
+      <div class="metric-card">
+        <span class="card-label-text">Total Budget</span>
+        <div class="card-data-line">
+          <!-- Coin Currency Financial Parameter Icon Shape -->
+          <svg class="card-svg-icon orange" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
+          <strong class="card-value-text">00</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 📭 Center Empty State Graphic Screen Canvas Component -->
+    <div class="center-empty-state-container">
+      <div class="art-empty-circle-frame">
+        <div class="empty-vector-art">
+          <!-- Structural Graphic Design elements wrapping the center canvas -->
+          <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="12" cy="14" r="3"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+        </div>
+      </div>
+      <h3 class="empty-state-heading">No data right now</h3>
+      <p class="empty-state-paragraph">Please click on <strong>create new</strong> to choose the sutible option</p>
     </div>
   `,
   styles: [`
-    .dashboard-container { display: flex; height: 100vh; width: 100vw; background-color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; overflow: hidden; margin: 0; }
+    .search-and-action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      margin-top: 4px;
+    }
+
+    .search-input-box {
+      display: flex;
+      align-items: center;
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 0 18px;
+      width: 600px;
+      height: 44px;
+      box-sizing: border-box;
+    }
+
+    .search-lens {
+      color: #94a3b8;
+      font-size: 15px;
+    }
+
+    .search-input-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      margin-inline-start: 10px;
+      font-size: 14px;
+      width: 100%;
+      color: #1e293b;
+    }
+
+    .action-create-btn {
+      background-color: #0e1e38;
+      color: #ffffff;
+      border: none;
+      border-radius: 24px;
+      padding: 0 36px;
+      height: 44px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(14, 30, 56, 0.15);
+      transition: background 0.2s;
+    }
+
+    .action-create-btn:hover { background-color: #1a2e4c; }
+
+    .cards-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 64px;
+    }
+
+    .metric-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 18px 24px;
+      box-sizing: border-box;
+      text-align: start;
+    }
+
+    .card-label-text {
+      font-size: 13px;
+      color: #1e293b;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .card-data-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-svg-icon { display: flex; align-items: center; }
+    .card-svg-icon.yellow { color: #f59e0b; }
+    .card-svg-icon.brown { color: #8b5cf6; }
+    .card-svg-icon.blue { color: #3b82f6; }
+    .card-svg-icon.orange { color: #f97316; }
+
+    .card-value-text {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0e1e38;
+    }
+
+    /* Centered Empty State circle graphic setup */
+    .center-empty-state-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .art-empty-circle-frame {
+      width: 110px;
+      height: 110px;
+      background-color: #e6f0fa;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .empty-vector-art {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .empty-state-heading {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0e1e38;
+      margin: 0 0 8px 0;
+    }
+
+    .empty-state-paragraph {
+      font-size: 14px;
+      color: #64748b;
+      margin: 0;
+    }
     
-    /* Sidebar Styles matching your clean dark-navy layout */
-    .sidebar { width: 240px; background-color: #0b192c; color: #ffffff; display: flex; flex-direction: column; padding: 24px 16px; box-sizing: border-box; border-inline-end: 1px solid #1e293b; }
-    .brand-zone { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding: 0 8px; }
-    .logo-text { font-size: 28px; font-weight: 900; color: #0066ff; font-family: 'Times New Roman', serif; letter-spacing: 1px; }
-    .collapse-btn { background: transparent; border: none; color: #64748b; cursor: pointer; font-size: 16px; }
-    .nav-menu { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-    .nav-item { background: transparent; border: none; color: #94a3b8; padding: 12px 14px; text-align: start; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.2s; width: 100%; display: flex; align-items: center; gap: 10px; }
-    [dir="rtl"] .nav-item { text-align: right; }
-    .nav-item:hover, .nav-item.active { background-color: #1e293b; color: #ffffff; }
-    .nav-item.active { background-color: #0044cc; color: #ffffff; }
-
-    /* Main Canvas Area Layout Container */
-    .main-canvas { flex: 1; display: flex; flex-direction: column; overflow: hidden; background-color: #ffffff; }
-    .top-bar { height: 70px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; padding: 0 32px; box-sizing: border-box; background-color: #ffffff; }
-    .search-wrapper { display: flex; align-items: center; background-color: #f1f5f9; border-radius: 20px; padding: 6px 16px; width: 280px; }
-    .search-wrapper input { border: none; background: transparent; outline: none; margin-inline-start: 8px; font-size: 14px; width: 100%; }
-    .utility-actions { display: flex; align-items: center; gap: 24px; }
-    .lang-toggle { background: transparent; border: none; color: #0066ff; font-weight: 700; font-size: 14px; cursor: pointer; }
-    .user-profile { display: flex; align-items: center; gap: 10px; }
-    .avatar { font-size: 24px; background: #e2e8f0; padding: 6px; border-radius: 50%; }
-    .user-info { display: flex; flex-direction: column; text-align: start; }
-    [dir="rtl"] .user-info { text-align: right; }
-    .username { font-size: 14px; font-weight: 700; color: #1e293b; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .role { font-size: 12px; color: #64748b; }
-    .create-btn { background-color: #0b192c; color: #ffffff; border: none; border-radius: 20px; padding: 10px 24px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-    .create-btn:hover { background-color: #1e293b; }
-
-    /* Content Area and Summary Metric Cards Viewport Grid */
-    .content-viewport { flex: 1; padding: 32px; overflow-y: auto; background-color: #f8fafc; box-sizing: border-box; display: flex; flex-direction: column; }
-    .view-title { font-size: 22px; font-weight: 800; color: #0b192c; margin: 0 0 24px 0; text-align: start; }
-    [dir="rtl"] .view-title { text-align: right; }
-    .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
-    .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-sizing: border-box; box-shadow: 0 1px 3px rgba(0,0,0,0.02); text-align: start; }
-    [dir="rtl"] .card { text-align: right; }
-    .card-label { font-size: 13px; color: #64748b; font-weight: 600; display: block; margin-bottom: 8px; }
-    .card-value { font-size: 22px; font-weight: 800; color: #0b192c; margin: 0; }
-
-    /* Empty State Canvas Styling Box */
-    .empty-state-canvas { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; }
-    .empty-icon-circle { width: 44px; height: 44px; border-radius: 50%; background-color: #0066ff; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; position: relative; }
-    .pulse-dot { width: 8px; height: 8px; background-color: #ffffff; border-radius: 50%; }
-    .empty-state-canvas h3 { font-size: 18px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0; }
-    .empty-state-canvas p { font-size: 14px; color: #64748b; margin: 0; }
+    .empty-state-paragraph strong { color: #0e1e38; }
   `]
 })
 export class DashboardComponent implements OnInit {
-  isArabic = false;
-  userEmail = 'no@example.com';
-  userPhone = '0673243';
-
-  ngOnInit() {
-    // 🛡️ Safe tracking verification extraction layer
-    const savedEmail = localStorage.getItem('username');
-    const savedPhone = localStorage.getItem('userphone');
-    if (savedEmail) this.userEmail = savedEmail;
-    if (savedPhone) this.userPhone = savedPhone;
-  }
-
-  toggleLanguage(): void {
-    this.isArabic = !this.isArabic;
-  }
-
-  onCreateNew(): void {
-    console.log('Create New dialog requested.');
-  }
+  ngOnInit(): void {}
 }
