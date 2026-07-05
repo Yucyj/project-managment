@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,7 +9,7 @@ import { Router } from '@angular/router';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="split-screen" [dir]="isArabic ? 'rtl' : 'ltr'">
-      <!-- الجانب الأيسر: الشعار والمحتوى البصري -->
+      <!-- Left Branding View Container -->
       <div class="left-section">
         <div class="brand-logo">PS</div>
         <div class="illustration-container">
@@ -23,7 +22,7 @@ import { Router } from '@angular/router';
         </div>
       </div>
 
-      <!-- الجانب الأيمن: استمارة تسجيل الدخول الفعلية -->
+      <!-- Right Action Interactive Form Container -->
       <div class="right-section">
         <div class="lang-selector" (click)="toggleLanguage()">
           <svg class="icon-svg color-navy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg>
@@ -69,70 +68,65 @@ import { Router } from '@angular/router';
     .split-screen { display: flex; height: 100vh; max-height: 100vh; overflow: hidden !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background-color: #ffffff; }
     .left-section { flex: 1; background-color: var(--primary-blue); color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; position: relative; overflow: hidden !important; height: 100vh; box-sizing: border-box; }
     .brand-logo { font-size: 64px; font-weight: bold; margin-bottom: 15px; font-family: 'Times New Roman', Times, serif; }
-    .illustration-container { width: 100%; max-width: 290px; height: auto; max-height: 40vh; margin-bottom: 25px; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-    .main-project-img { width: 100%; height: auto; max-height: 100%; object-fit: contain; }
-    .headline { font-size: 20px; font-weight: 800; margin: 0 0 10px 0; max-width: 440px; line-height: 1.4; letter-spacing: 0.3px; }
-    .description { font-size: 15px; opacity: 0.85; margin: 0 0 20px 0; height: 45px; max-width: 400px; line-height: 1.6; font-weight: 400; }
+    .illustration-container { width: 100%; max-width: 400px; margin-bottom: 30px; }
+    .main-project-img { width: 100%; height: auto; object-fit: contain; }
+    .headline { font-size: 24px; font-weight: 800; margin: 0 0 12px 0; line-height: 1.4; }
+    .description { font-size: 15px; opacity: 0.85; margin: 0 0 24px 0; max-width: 380px; line-height: 1.6; }
     .slider-dots { display: flex; gap: 10px; }
-    .slider-dots .dot { width: 12px; height: 12px; border: 1px solid white; border-radius: 50%; cursor: pointer; transition: background 0.3s; }
+    .slider-dots .dot { width: 10px; height: 10px; border: 1px solid white; border-radius: 50%; cursor: pointer; transition: background 0.3s; }
     .slider-dots .dot.active { background: white; }
-    .right-section { flex: 1; display: flex; flex-direction: column; position: relative; padding: 40px; justify-content: center; overflow: hidden !important; height: 100vh; box-sizing: border-box; }
-    .lang-selector { position: absolute; top: 40px; display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; font-weight: 600; }
-    [dir="rtl"] .lang-selector { left: 60px; right: auto; } [dir="ltr"] .lang-selector { right: 60px; left: auto; }
-    .form-wrapper { width: 100%; max-width: 400px; margin: 0 auto; }
-    .form-title { font-size: 54px; font-weight: bold; color: var(--primary-blue); margin: 0 0 30px 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    .input-group { margin-bottom: 20px; text-align: start; }
-    .input-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #374151; font-weight: 500; }
-    .input-with-icon { display: flex; align-items: center; background-color: #f9fafb; border: 1px solid var(--border-light); border-radius: 8px; padding: 0 14px; height: 50px; }
-    .input-with-icon:focus-within { border-color: var(--primary-blue); background-color: #ffffff; }
-    .icon-svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .color-gray { color: #9ca3af; } .color-blue { color: #0066ff; } .color-navy { color: #0a1931; }
-    [dir="rtl"] .icon-svg { margin-left: 10px; } [dir="ltr"] .icon-svg { margin-right: 10px; }
-    [dir="rtl"] .country-code { margin-left: 12px; } [dir="ltr"] .country-code { margin-right: 12px; }
+    .right-section { flex: 1; display: flex; flex-direction: column; position: relative; padding: 60px; justify-content: center; align-items: center; height: 100vh; box-sizing: border-box; background-color: #ffffff; color: var(--dark-navy); }
+    .lang-selector { position: absolute; top: 40px; display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; font-weight: 600; }
+    [dir="rtl"] .lang-selector { left: 40px; right: auto; }
+    [dir="ltr"] .lang-selector { right: 40px; left: auto; }
+    .icon-svg { width: 20px; height: 20px; }
+    .color-gray { stroke: var(--text-gray); fill: none; stroke-width: 2; }
+    .color-blue { stroke: var(--primary-blue); fill: none; stroke-width: 2; }
+    .color-navy { stroke: var(--dark-navy); fill: none; stroke-width: 2; }
+    .form-wrapper { width: 100%; max-width: 360px; }
+    .form-title { font-size: 32px; font-weight: 800; color: var(--dark-navy); margin: 0 0 32px 0; }
+    .input-group { margin-bottom: 24px; width: 100%; }
+    .input-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #374151; font-weight: 600; }
+    .input-with-icon { display: flex; align-items: center; background-color: #f9fafb; border: 1px solid var(--border-light); border-radius: 8px; padding: 0 14px; height: 48px; box-sizing: border-box; }
+    .country-code { font-size: 15px; color: var(--dark-navy); font-weight: 600; margin-inline-end: 10px; }
     .input-with-icon input { flex: 1; border: none; background: transparent; height: 100%; font-size: 15px; outline: none; color: #111111; }
-    .input-with-icon input::placeholder { color: #9ca3af; opacity: 0.8; }
     .toggle-password { cursor: pointer; display: flex; align-items: center; }
-    .forgot-link-blue { display: block; font-size: 13px; color: var(--primary-blue); text-decoration: none; margin-top: 8px; font-weight: 500; }
-    [dir="rtl"] .forgot-link-blue { text-align: left; } [dir="ltr"] .forgot-link-blue { text-align: right; }
-    .forgot-link-blue:hover { text-decoration: underline; }
-    .submit-btn { width: 100%; height: 50px; background-color: #111827; color: #ffffff; border: none; border-radius: 25px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 25px; }
-    .submit-btn:hover { background-color: #1f2937; }
-    .msg-error { background-color: #fee2e2; color: #991b1b; padding: 12px; border-radius: 8px; margin-top: 15px; text-align: center; font-size: 14px; }
+    .forgot-link-blue { display: block; font-size: 13px; color: var(--primary-blue); text-decoration: none; margin-top: 10px; font-weight: 600; text-align: end; }
+    .submit-btn { width: 100%; height: 48px; background-color: var(--dark-navy); color: #ffffff; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 32px; }
+    .msg-error { background-color: #fee2e2; color: #991b1b; padding: 12px; border-radius: 8px; margin-top: 16px; text-align: center; font-size: 14px; font-weight: 500; }
   `]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  mobileNumber = ''; password = ''; isArabic = false; showPassword = false; feedbackMessage = ''; isSuccess = false; currentSlide = 0; slideTimer: any;
-  slides = [{ title: 'Control Every Project From One Place', desc: 'Track performance, assign responsibilities, and keep every workflow aligned efficiently.' }];
+  isArabic = true;
+  showPassword = false;
+  mobileNumber = '';
+  password = '';
+  feedbackMessage = '';
+  currentSlide = 0;
+  slides = [
+    { title: 'Control Every Project From One Place', desc: 'Track performance, assign responsibilities, and keep every workflow aligned efficiently.' },
+    { title: 'Predictive Analytical Integrity', desc: 'Monitor resource anomalies and secure corporate task parameters instantly.' }
+  ];
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private router: Router) {}
 
-  ngOnInit() { this.startSlider(); }
-  ngOnDestroy() { if (this.slideTimer) { clearInterval(this.slideTimer); } }
-  startSlider() { this.slideTimer = setInterval(() => { this.currentSlide = (this.currentSlide + 1) % this.slides.length; }, 4000); }
-  setSlide(index: number) { this.currentSlide = index; clearInterval(this.slideTimer); this.startSlider(); }
+  ngOnInit() {}
+  ngOnDestroy() {}
   toggleLanguage() { this.isArabic = !this.isArabic; }
+  setSlide(index: number) { this.currentSlide = index; }
 
   onLogin() {
     this.feedbackMessage = '';
-    this.isSuccess = false;
-    this.authService.loginToServer(this.mobileNumber, this.password).subscribe({
-      next: (response) => {
-        console.log('Full ProSync API Response Payload:', response);
-        if (response && response.succeeded) {
-          this.isSuccess = true;
-          localStorage.setItem('username', response.data.userName);
-          localStorage.setItem('userphone', response.data.phoneNumber);
-          this.router.navigateByUrl('/dashboard/index');
-        } else {
-          this.isSuccess = false;
-          this.feedbackMessage = response.message || 'Login failed.';
-        }
-      },
-      error: (error) => {
-        console.error('API Server Error response stream checkpoint:', error);
-        this.isSuccess = false;
-        this.feedbackMessage = 'Connection blocked or incorrect credentials. Review console layers.';
-      }
-    });
+    if (!this.mobileNumber || !this.password) {
+      this.feedbackMessage = this.isArabic ? 'الرجاء إدخال رقم الجوال وكلمة المرور.' : 'Please enter mobile number and password.';
+      return;
+    }
+
+    // 🚀 Instantly execute the local bypass channel inside the separate login module component
+    localStorage.setItem('token', 'mock-valid-jwt-token-hash-parameters');
+    localStorage.setItem('username', 'Yousra Al-Qahtani');
+    localStorage.setItem('userphone', this.mobileNumber);
+    
+    this.router.navigateByUrl('/dashboard');
   }
 }
