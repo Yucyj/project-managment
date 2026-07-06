@@ -3,30 +3,32 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    //  سطر إعادة التوجيه التلقائي المرن لأي دومين (Localhost أو أونلاين)
-    pathMatch: 'full',
-    redirectTo: 'login' 
+    redirectTo: 'auth/login',
+    pathMatch: 'full'
   },
   {
-    path: 'login',
-    // تحميل صفحة تسجيل الدخول المقسمة كبوابة الحماية الرئيسية للموقع
-    loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent)
+    path: 'auth',
+    // 🔗 استدعاء مسارات الـ Auth الفرعية بطريقة الـ Lazy Loading الاحترافية
+    loadChildren: () =>
+      import('./features/auth/auth.routes').then(routes => routes.AUTH_ROUTES)
   },
   {
     path: '',
-    // ربط الهيكل الخارجي (السايدبار الأبيض وتوب بار يسرى) كغطاء للموقع بالكامل
-    loadComponent: () => import('./layout/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
+    // ربط الهيكل الخارجي (السايدبار الأبيض وتوب بار يسرى الفاخر) كغطاء للموقع بالكامل
+    loadComponent: () =>
+      import('./layout/main-layout/main-layout.component')
+        .then(component => component.MainLayoutComponent),
     children: [
       {
         path: 'dashboard',
-        // عرض كروت الإحصائيات الصافية والرسمة الهندسية ممركزة بداخل الهيكل
-        loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+        // 🔗 استدعاء مسارات الداشبورد الفرعية بطريقة الـ Lazy Loading الاحترافية
+        loadChildren: () =>
+          import('./features/dashboard/dashboard.routes').then(routes => routes.DASHBOARD_ROUTES)
       }
     ]
   },
   {
     path: '**',
-    // حماية احتياطية: أي مسار عشوائي يكتبه المستخدم يطير به ويرجعه للوجن فوراً
-    redirectTo: 'login'
+    redirectTo: 'auth/login'
   }
 ];

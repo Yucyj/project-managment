@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://etmam.store",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
