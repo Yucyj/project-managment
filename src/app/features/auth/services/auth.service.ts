@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environments';
 
 @Injectable({
   providedIn: 'root'
@@ -8,12 +9,14 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private readonly http = inject(HttpClient);
 
-  // 🚀 المطابقة الكاملة للسواجر: استخدام الـ Auth بالكابيتال لحسم الـ 404 نهائياً عبر الـ Proxy
-  private readonly apiUrl = '/api/Auth/login';
+  private readonly apiUrl = `${environment.apiBaseUrl}/Auth/login`;
 
   loginToServer(phone: string, password: string): Observable<any> {
-    const payloadBody = { phone, password };
-    
+    const payloadBody = {
+      phone: phone,
+      password: password
+    };
+
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   setSlide(index: number) { this.currentSlide = index; }
   togglePassword(): void { this.showPassword = !this.showPassword; }
 
+
   onLogin() {
     this.feedbackMessage = '';
     this.isSuccess = false;   
@@ -48,13 +49,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     
     this.isLoading = true;
     
-    // 🌐 الاستدعاء المعتمد عبر الـ Service القياسي لمنع انكسار السطر 52
+    // 🌐 الاستدعاء التجاري الآمن والنظيف عبر خدمة المشرف الرسمية فقط
     this.authService.loginToServer(this.mobileNumber, this.password).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-        console.log('Commercial API Security Response:', response);
+        console.log('Full ProSync API Response Payload:', response);
 
-        // التحقق من حالة النجاح بناءً على رد السيرفر المعتمد (Success = 1)
+        // التحقق من حالة النجاح المتوافقة مع السواجر (Succeeded أو status === 1)
         if (response && (response.succeeded === true || response.status === 1)) {
           this.isSuccess = true;
           this.feedbackMessage = 'Login Successful! Redirecting...';
@@ -63,14 +64,14 @@ export class LoginComponent implements OnInit, OnDestroy {
             localStorage.setItem('username', response.data.userName || 'Authenticated User');
             localStorage.setItem('userphone', response.data.phoneNumber || this.mobileNumber);
             
-            // التقاط الـ accessToken الفعلي كما يرجعه السيرفر بالسواجر بالملي
+            // سحب الـ accessToken الفعلي الصادر من قاعدة البيانات أونلاين
             const token = response.data.accessToken || response.data.AccessToken || response.data.token;
             if (token) {
               localStorage.setItem('token', token);
             }
           }
           
-          // العبور التجاري الفوري لداخل لوحة التحكم والـ Dashboard
+          // الانتقال الهيدروليكي المباشر والآمن لداخل لوحة التحكم والـ Dashboard
           setTimeout(() => {
             this.router.navigateByUrl('/dashboard');
           }, 1000);
@@ -81,9 +82,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       },
       error: (error: any) => {
         this.isLoading = false;
-        console.error('Boundary Network Error Checkpoint:', error);
+        console.error('API Server Error response stream checkpoint:', error);
         this.isSuccess = false;
-        this.feedbackMessage = 'Authentication failed. Please verify your connection or server credentials.';
+        this.feedbackMessage = this.isArabic 
+          ? 'فشل الاتصال بالخادم. يرجى التأكد من صحة رقم الجوال وكلمة المرور.' 
+          : 'Server authentication failed. Please check your credentials.';
       }
     });
   }

@@ -8,7 +8,6 @@ export const AUTH_ROUTES: Routes = [
   },
   {
     path: 'login',
-    // 🚀 تصحيح مسار الصعود والنزول ليتجه إلى pages/login/login.component بالملي
     loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent)
   }
 ];
