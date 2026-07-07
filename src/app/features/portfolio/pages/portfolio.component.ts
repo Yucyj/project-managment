@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PortfolioService, PortfolioItem } from '../services/portfolio.service';
+import { PortfolioService, PortfolioItem, SwaggerApiResponse } from '../services/portfolio.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -22,16 +22,22 @@ export class PortfolioComponent implements OnInit {
   fetchLivePortfolios(): void {
     this.isLoading = true;
     this.portfolioService.getAllPortfolios().subscribe({
-      next: (response) => {
-        // 🚀 فك التغليف السليم: سحب المصفوفة الحية مباشرة من حقل data الراجع من السيرفر
-        if (response && response.succeeded && response.data) {
-          this.portfoliosList = response.data;
+      next: (response: SwaggerApiResponse) => {
+        console.log('Raw Response from Server captured:', response);
+        
+        if (response && response.succeeded) {
+          // 🚀 كسر عناد حالة الأحرف: فحص وتأمين قراءة المصفوفة الحية سواء رجعت 'data' سمول أو 'Data' كابيتال
+          const liveData = response.data || (response as any).Data;
+          
+          if (liveData && Array.isArray(liveData)) {
+            this.portfoliosList = liveData;
+          }
         }
         this.isLoading = false;
-        console.log('Figma Connected to Swagger DB Successfully:', this.portfoliosList);
+        console.log('Successfully connected and populated table array:', this.portfoliosList);
       },
-      error: (err) => {
-        console.error('API Error Connection Level:', err);
+      error: (err: any) => {
+        console.error('API Pipeline Connection Failure:', err);
         this.isLoading = false;
       }
     });

@@ -1,6 +1,6 @@
 <div class="portfolio-wrapper">
   
-  <!-- 📊 High-Density Matrix Counters - Driven Dynamically by Live Response Array Stream Matrix -->
+  <!-- 📊 العدادات الفوقية تقرأ ديناميكياً عدد المحافظ الحية الراجعة من السيرفر -->
   <div class="portfolio-summary-grid">
     <div class="summary-card">
       <span class="card-title-text">Total Portfolio</span>
@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <!-- 🔍 Compact Control Parameters Header Filter Layout -->
+  <!-- شريط البحث والتحكم لفيجما -->
   <div class="table-controls-row">
     <h2 class="section-heading-title">All portfolios</h2>
     <div class="controls-actions-group">
@@ -30,14 +30,14 @@
     </div>
   </div>
 
-  <!-- 📊 Table Schema - Fully Calibrated 1:1 Against Authentic Swagger API Data Fields -->
+  <!-- 📊 الجدول الهندسي المنظم والمطابق لبيانات الـ Swagger الحية تماماً الحين -->
   <div class="table-responsive-container">
     <table class="figma-data-table">
       <thead>
         <tr>
           <th>Portfolio Name</th>
           <th>Description</th>
-          <th>Manager Name</th>
+          <th>Manager Email</th>
           <th>Projects Count</th>
           <th>Owner Email</th>
           <th>Status</th>
@@ -45,12 +45,12 @@
         </tr>
       </thead>
       
-      <!-- Reactive Stream Ingestion Mapping Container -->
+      <!-- حقن وتفجير البيانات الحقيقية أونلاين القادمة من قاعدة البيانات -->
       <tbody *ngIf="!isLoading && portfoliosList.length > 0">
         <tr *ngFor="let item of portfoliosList">
           <td class="primary-cell-text">{{ item.name }}</td>
           <td>{{ item.description || 'No Description Available' }}</td>
-          <td>{{ item.managerName || 'Not Assigned' }}</td>
+          <td>{{ item.managerName }}</td>
           <td class="bold-cell-num">{{ item.projectsCount }}</td>
           <td>{{ item.ownerName }}</td>
           <td>
@@ -66,10 +66,9 @@
     </table>
   </div>
 
-  <!-- 📭 Structural Processing Backdrop Indicator Overlay Block -->
+  <!-- مؤشر التحميل الصافي لحماية تجربة العميل -->
   <div class="center-empty-state-container" *ngIf="isLoading">
     <h3 class="empty-state-heading">Loading Live Database Records...</h3>
     <p class="empty-state-paragraph">Please wait while pulling clean portfolio datasets from etmam.store server assets.</p>
   </div>
-
 </div>
