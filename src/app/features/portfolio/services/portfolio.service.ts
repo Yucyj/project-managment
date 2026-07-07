@@ -2,14 +2,28 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+// 🚀 مطابقة أسماء حقول الداتابيز الفردية الراجعة من الـ Swagger بالملي
 export interface PortfolioItem {
-  id?: number;
+  id: number;
   name: string;
-  category: string;
-  programs: string;
-  projects: number;
-  owner: string;
+  budget: number;
+  description: string;
+  createdDate: string;
+  status: string | null;
+  projectsCount: number;
+  ownerName: string;
+  sponsorName: string;
+  managerName: string;
+  statusProjects: string | null;
+  attachments: any[];
+}
+
+// 🚀 الـ Interface للحاوية الرئيسية التي ترجعها الـ API
+export interface SwaggerApiResponse {
+  succeeded: boolean;
   status: string;
+  message: string;
+  data: PortfolioItem[]; // المصفوفة الحية بداخل حقل data
 }
 
 @Injectable({
@@ -17,9 +31,10 @@ export interface PortfolioItem {
 })
 export class PortfolioService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://etmam.store';
+  private apiUrl = 'https://etmam.store/Isa/api/portfolio/getAll-protfolios';
 
-  getAllPortfolios(): Observable<PortfolioItem[]> {
-    return this.http.get<PortfolioItem[]>(this.apiUrl);
+  // دالة الاستهلاك الصافية المربوطة بالـ GET ريكويست
+  getAllPortfolios(): Observable<SwaggerApiResponse> {
+    return this.http.get<SwaggerApiResponse>(this.apiUrl);
   }
 }

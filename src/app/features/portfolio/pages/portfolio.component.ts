@@ -16,23 +16,22 @@ export class PortfolioComponent implements OnInit {
   isLoading = true;
 
   ngOnInit(): void {
-    this.loadPortfoliosData();
+    this.fetchLivePortfolios();
   }
 
-  loadPortfoliosData(): void {
+  fetchLivePortfolios(): void {
     this.isLoading = true;
     this.portfolioService.getAllPortfolios().subscribe({
-      next: (data) => {
-        this.portfoliosList = data;
+      next: (response) => {
+        // 🚀 فك التغليف السليم: سحب المصفوفة الحية مباشرة من حقل data الراجع من السيرفر
+        if (response && response.succeeded && response.data) {
+          this.portfoliosList = response.data;
+        }
         this.isLoading = false;
+        console.log('Figma Connected to Swagger DB Successfully:', this.portfoliosList);
       },
       error: (err) => {
-        console.error('API Fallback Active:', err);
-        // داتا تجريبية ليظل الجدول متوهجاً لحين تفعيل الربط بكره مع المشرف
-        this.portfoliosList = [
-          { name: 'Saudi Vision Portfolio', category: 'Strategic', programs: 'NTP', projects: 12, owner: 'PMO Lead', status: 'On Track' },
-          { name: 'Digital Transformation', category: 'Tech Infrastructure', programs: 'EGov', projects: 8, owner: 'Abdulaziz Mo', status: 'Pending' }
-        ];
+        console.error('API Error Connection Level:', err);
         this.isLoading = false;
       }
     });

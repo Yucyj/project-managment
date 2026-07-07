@@ -1,9 +1,13 @@
 import { Routes } from '@angular/router';
 
+// 🚀 محاكاة حارس أمان ذكي: يفحص وجود التوكن أو اسم المستخدم قبل السماح بالعبور للداشبورد
+const isAuthenticated = () => !!localStorage.getItem('username') || !!localStorage.getItem('name');
+
 export const routes: Routes = [
+  // 🔒 تأمين البوابة الرئيسية: إذا فتح المستخدم الموقع لأول مرة، يوجه قسرياً لصفحة اللوجن (auth)
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: isAuthenticated() ? 'dashboard' : 'auth',
     pathMatch: 'full'
   },
   {
@@ -13,7 +17,6 @@ export const routes: Routes = [
   },
   {
     path: '',
-    // تحميل الهيكل الخارجي الفاخر للموقع
     loadComponent: () =>
       import('./layout/main-layout/main-layout.component').then(component => component.MainLayoutComponent),
     children: [
@@ -22,7 +25,6 @@ export const routes: Routes = [
         loadComponent: () => 
           import('./features/dashboard/pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
       },
-      // 🚀 التصحيح المعماري الحاسم: قراءة الملف مباشرة من مجلد pages المتوافق مع جهازك بالملي
       {
         path: 'portfolio',
         loadComponent: () => 
@@ -30,8 +32,9 @@ export const routes: Routes = [
       }
     ]
   },
+  // 🔒 حماية احتياطية ضد المسارات العشوائية المكسورة
   {
     path: '**',
-    redirectTo: 'dashboard'
+    redirectTo: isAuthenticated() ? 'dashboard' : 'auth'
   }
 ];
