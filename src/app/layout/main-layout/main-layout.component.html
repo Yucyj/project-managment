@@ -1,90 +1,143 @@
-<div class="app-layout-shell" [dir]="isArabic ? 'rtl' : 'ltr'">
+<!-- 🎨 حقن بروتوكول الـ CSS المدمج لحماية الأبعاد وقفل حجم الأيقونات ومنع انفجارها نهائياً الحين -->
+<style>
+  .platform-container {
+    display: flex !important; width: 100vw !important; height: 100vh !important; overflow: hidden !important; background-color: #ffffff !important; font-family: 'Inter', system-ui, sans-serif !important;
+  }
   
-  <!-- 📋 Sidebar Panel Container Component Frame -->
-  <aside class="sidebar-wrapper">
-    <div class="sidebar-top-bar">
-      <div class="three-dots-container">
-        <span class="dot-element grey-dot"></span>
-        <span class="dot-element grey-dot"></span>
-        <span class="dot-element grey-dot"></span>
+  /* 📁 إجبار السايدبار على الانكماش والاستقرار بحجمه الملموم لفيجما فوراً */
+  .figma-sidebar {
+    width: 240px !important; max-width: 240px !important; min-width: 240px !important; background-color: #f8fafc !important; border-right: 1px solid #e2e8f0 !important; display: flex !important; flex-direction: column !important; padding: 24px 16px !important; box-sizing: border-box !important; flex-shrink: 0 !important;
+  }
+  .sidebar-brand { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 32px !important; width: 100% !important; }
+  .brand-logo-container { display: flex !important; flex-direction: column !important; gap: 4px !important; }
+  .logo-dots { display: flex !important; gap: 4px !important; }
+  .dot { width: 8px !important; height: 8px !important; border-radius: 50% !important; display: inline-block !important; }
+  .blue-dot { background-color: #1e3a8a !important; }
+  .grey-dot { background-color: #cbd5e1 !important; }
+
+  /* 🔵 تحويل كافة الكلمات ونصوص المنصة من الأسود المكتوم إلى الكحلي المشرق لفيجما الهدف بدقة */
+  .brand-text, .page-title, .user-email-label, .empty-state-heading { 
+    color: #0f2d59 !important; 
+  }
+  .brand-text { font-size: 26px !important; font-weight: 800 !important; letter-spacing: -0.03em !important; }
+  .sidebar-toggle-arrow { background: #ffffff !important; border: 1px solid #cbd5e1 !important; width: 28px !important; height: 28px !important; border-radius: 50% !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #64748b !important; }
+
+  .sidebar-nav { display: flex !important; flex-direction: column !important; gap: 4px !important; width: 100% !important; }
+  .nav-item {
+    display: flex !important; align-items: center !important; gap: 12px !important; background: transparent !important; border: none !important; padding: 10px 12px !important; border-radius: 8px !important; font-size: 14px !important; font-weight: 500 !important; color: #475569 !important; width: 100% !important; text-align: start !important; cursor: pointer !important;
+  }
+  .nav-item.active { background-color: #1e3a8a !important; color: #ffffff !important; }
+  .nav-item.active span { color: #ffffff !important; }
+
+  /* 🚀 قفل الأبعاد الصارم: إجبار كافة الأيقونات والـ SVGs الجانبية على الانكماش الفوري بحجم 18px ومنع تضخمها */
+  .nav-icon, svg, .figma-sidebar svg {
+    width: 18px !important; height: 18px !important; max-width: 18px !important; max-height: 18px !important; min-width: 18px !important; min-height: 18px !important; flex-shrink: 0 !important; display: inline-block !important; color: currentColor !important;
+  }
+
+  .figma-main-content { flex: 1 !important; background-color: #ffffff !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; }
+  .figma-header { height: 64px !important; border-bottom: 1px solid #f1f5f9 !important; display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 0 32px !important; flex-shrink: 0 !important; }
+  .page-title { font-size: 22px !important; font-weight: 700 !important; }
+  .header-user-actions { display: flex !important; align-items: center !important; gap: 24px !important; }
+  .lang-switch-btn { display: flex !important; align-items: center !important; gap: 6px !important; font-size: 14px !important; color: #475569 !important; font-weight: 500 !important; }
+  .user-profile-badge { display: flex !important; align-items: center !important; gap: 8px !important; }
+  .profile-avatar { width: 32px !important; height: 32px !important; background-color: #cbd5e1 !important; border-radius: 50% !important; }
+  .profile-info-text { display: flex !important; flex-direction: column !important; text-align: start !important; }
+  .user-id-sub { font-size: 11px !important; color: #94a3b8 !important; }
+  .dashboard-viewport-render { flex: 1 !important; overflow-y: auto !important; background-color: #ffffff !important; padding: 32px !important; box-sizing: border-box !important; }
+</style>
+
+<div class="platform-container">
+  
+  <!-- 📁 السايدبار المطور والمكتمل بكافة القوائم المفقودة الثمانية -->
+  <aside class="figma-sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo-container">
+        <div class="logo-dots">
+          <span class="dot blue-dot"></span>
+          <span class="dot grey-dot"></span>
+          <span class="dot grey-dot"></span>
+        </div>
+        <div class="brand-text">PS</div>
       </div>
-      <div class="branding-logo">PS</div>
-      <button class="collapse-icon-button" type="button">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <button class="sidebar-toggle-arrow" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
     </div>
     
-    <nav class="sidebar-navigation">
-      <button class="sidebar-nav-link active" routerLink="/dashboard" routerLinkActive="active">
-        <svg class="nav-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+    <nav class="sidebar-nav">
+      <!-- 1️⃣ Dashboard -->
+      <button class="nav-item active" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
         <span>Dashboard</span>
       </button>
-      <button class="sidebar-nav-link">
-        <svg class="nav-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+
+      <!-- 2️⃣ Portfolios -->
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
         <span>Portfolios</span>
       </button>
-      <button class="sidebar-nav-link">
-        <svg class="nav-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+
+      <!-- 3️⃣ Programs -->
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
         <span>Programs</span>
       </button>
-      <button class="sidebar-nav-link">
-        <svg class="nav-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+
+      <!-- 4️⃣ Projects -->
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         <span>Projects</span>
       </button>
-      <button class="sidebar-nav-link">
-        <svg class="nav-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+
+      <!-- 5️⃣ Change Requests -->
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         <span>Change Requests</span>
       </button>
-      <button class="sidebar-nav-link">
-        <svg class="nav-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+
+      <!-- 6️⃣ Plans -->
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span>Plans</span>
       </button>
-      <button class="sidebar-nav-link">
-        <svg class="nav-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+
+      <!-- 7️⃣ Users -->
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
         <span>Users</span>
       </button>
-      <button class="sidebar-nav-link">
-        <svg class="nav-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+
+      <!-- 8️⃣ Setting -->
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         <span>Setting</span>
       </button>
     </nav>
   </aside>
 
-  <!-- 🖥️ Core Layout Canvas Container Block -->
-  <div class="content-canvas-area">
-    
-    <!-- Header Functional Dashboard Area -->
-    <header class="app-header-bar">
-      <div class="header-left-group">
-        <h1 class="header-title-text">Dashboard</h1>
-      </div>
-      
-      <div class="header-right-group">
-        <button class="language-selection-button" type="button" (click)="toggleLanguage()">
-          العربية
-        </button>
-        
-        <div class="header-notification-icon">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+  <!-- 🏛️ مساحة العمل والتوب بار الفاخر الموحد -->
+  <main class="figma-main-content">
+    <header class="figma-header">
+      <h1 class="page-title">Dashboard</h1>
+      <div class="header-user-actions">
+        <div class="lang-switch-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+          <span>العربية</span>
         </div>
-        
-        <div class="header-profile-badge">
-          <div class="avatar-circle">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <div class="user-profile-badge">
+          <div class="profile-avatar"></div>
+          <div class="profile-info-text">
+            <span class="user-email-label">{{ userEmail }}</span>
+            <span class="user-id-sub">{{ userPhone }}</span>
           </div>
-          <div class="profile-meta-text">
-            <span class="user-display-name">{{ userEmail }}</span>
-            <span class="user-sub-email">PMO Email</span>
-          </div>
-          <span class="profile-dropdown-arrow">▼</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
       </div>
     </header>
 
-    <!-- Content Router Outlet Rendering Frame Canvas -->
-    <main class="router-view-canvas">
+    <!-- مساحة حقن محتوى كروت الداشبورد الخارجية المستقرة -->
+    <div class="dashboard-viewport-render">
       <router-outlet></router-outlet>
-    </main>
-  </div>
-
+    </div>
+  </main>
 </div>

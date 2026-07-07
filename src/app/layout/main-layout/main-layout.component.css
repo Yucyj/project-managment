@@ -1,219 +1,25 @@
-:host {
-  --sidebar-width: 260px;
-  --topbar-height: 70px;
-  --navy-dark: #0c1e36;
-  --bg-gray: #f8fafc;
-  --border-light: #e2e8f0;
-}
-
-.dashboard-wrapper {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  background-color: var(--bg-gray);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* 📋 فرد السايد بار الأبيض الصافي يسار الشاشة */
-.sidebar-container {
-  width: var(--sidebar-width);
-  background-color: #ffffff;
-  border-inline-end: 1px solid var(--border-light);
-  display: flex;
-  flex-direction: column;
-  padding: 24px 16px;
-  box-sizing: border-box;
-  height: 100vh;
-  flex-shrink: 0;
-}
-
-.sidebar-header {
-  margin-bottom: 32px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.header-dots {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 12px;
-}
-
-.header-dots span {
-  width: 8px;
-  height: 8px;
-  background-color: #cbd5e1;
-  border-radius: 50%;
-}
-
-.logo-zone {
-  font-size: 32px;
-  font-weight: 800;
-  color: #1a4273;
-  font-family: 'Times New Roman', Times, serif;
-}
-
-.collapse-toggle-btn {
-  position: absolute;
-  top: 20px;
-  right: -28px;
-  background: #ffffff;
-  border: 1px solid var(--border-light);
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #64748b;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  z-index: 10;
-}
-
-[dir="rtl"] .collapse-toggle-btn {
-  left: -28px;
-  right: auto;
-  transform: rotate(180deg);
-}
-
-.sidebar-nav-links {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.menu-link {
-  background: transparent;
-  border: none;
-  padding: 12px 14px;
-  text-align: start;
-  font-size: 14px;
-  color: #334155;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-[dir="rtl"] .menu-link { text-align: right; }
-.menu-link:hover { background-color: #f1f5f9; }
-
-.menu-link.active {
-  background-color: var(--navy-dark);
-  color: #ffffff;
-}
-
-/* 🖥️ فرد مساحة المحتوى والشريط العلوي */
-.stage-canvas {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  height: 100vh;
-}
-
-.top-nav-bar {
-  background-color: #ffffff;
-  padding: 0 32px;
-  height: var(--topbar-height);
-  border-bottom: 1px solid var(--border-light);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
-
-.title-and-search {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.page-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--navy-dark);
-  margin: 0;
-}
-
-.user-meta-actions {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.language-selector-btn {
-  background: transparent;
-  border: none;
-  color: var(--navy-dark);
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.notification-bell {
-  color: #64748b;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.profile-card-badge {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.user-avatar-image {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  background-color: #f1f5f9;
-  border: 1px solid var(--border-light);
-}
-
-.profile-text-labels {
-  display: flex;
-  flex-direction: column;
-  text-align: start;
-}
-
-[dir="rtl"] .profile-text-labels { text-align: right; }
-
-.account-name {
-  font-size: 13px;
-  color: #1e293b;
-  font-weight: 700;
-}
-
-.account-email {
-  font-size: 11px;
-  color: #94a3b8;
-}
-
-.dropdown-chevron {
-  font-size: 10px;
-  color: #94a3b8;
-}
-
-/* مساحة عرض الكروت الفرعية */
-.page-body-viewport {
-  flex: 1;
-  padding: 24px 32px;
-  overflow-y: auto;
-  box-sizing: border-box;
-  background-color: var(--bg-gray);
-}
+.platform-container { display: flex !important; width: 100vw !important; height: 100vh !important; overflow: hidden !important; background-color: #ffffff !important; font-family: sans-serif !important; }
+.figma-sidebar { width: 240px !important; background-color: #f8fafc !important; border-right: 1px solid #e2e8f0 !important; display: flex !important; flex-direction: column !important; padding: 24px 16px !important; box-sizing: border-box !important; flex-shrink: 0 !important; }
+.sidebar-brand { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 32px !important; }
+.brand-logo-container { display: flex !important; flex-direction: column !important; gap: 4px !important; }
+.logo-dots { display: flex !important; gap: 4px !important; }
+.dot { width: 8px !important; height: 8px !important; border-radius: 50% !important; display: inline-block !important; }
+.blue-dot { background-color: #1e3a8a !important; }
+.grey-dot { background-color: #cbd5e1 !important; }
+.brand-text, .page-title { color: #0f2d59 !important; font-weight: 800 !important; }
+.brand-text { font-size: 26px !important; letter-spacing: -0.03em !important; }
+.sidebar-toggle-arrow { background: #ffffff !important; border: 1px solid #cbd5e1 !important; width: 28px !important; height: 28px !important; border-radius: 50% !important; cursor: pointer !important; }
+.sidebar-nav { display: flex !important; flex-direction: column !important; gap: 4px !important; }
+.nav-item { display: flex !important; align-items: center !important; background: transparent !important; border: none !important; padding: 10px 12px !important; border-radius: 8px !important; font-size: 14px !important; font-weight: 500 !important; color: #475569 !important; width: 100% !important; text-align: start !important; }
+.nav-item.active { background-color: #1e3a8a !important; color: #ffffff !important; }
+.figma-main-content { flex: 1 !important; background-color: #ffffff !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; }
+.figma-header { height: 64px !important; border-bottom: 1px solid #f1f5f9 !important; display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 0 32px !important; flex-shrink: 0 !important; }
+.page-title { font-size: 22px !important; }
+.header-user-actions { display: flex !important; align-items: center !important; gap: 24px !important; }
+.lang-switch-btn { font-size: 14px !important; color: #475569 !important; font-weight: 500 !important; }
+.user-profile-badge { display: flex !important; align-items: center !important; gap: 8px !important; }
+.profile-avatar { width: 32px !important; height: 32px !important; background-color: #cbd5e1 !important; border-radius: 50% !important; }
+.profile-info-text { display: flex !important; flex-direction: column !important; text-align: start !important; }
+.user-email-label { font-size: 14px !important; font-weight: 700 !important; color: #0f2d59 !important; }
+.user-id-sub { font-size: 11px !important; color: #94a3b8 !important; }
+.dashboard-viewport-render { flex: 1 !important; overflow-y: auto !important; background-color: #ffffff !important; padding: 32px !important; box-sizing: border-box !important; }

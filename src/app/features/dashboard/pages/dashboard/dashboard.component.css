@@ -1,0 +1,10 @@
+@Component({
+  selector: 'app-dashboard',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.css' // 🚀 تصحيح: إعادة المسار لـ dashboard.component.css الخاص به
+})
+export class DashboardComponent implements OnInit {
+  ngOnInit(): void {}
+}
