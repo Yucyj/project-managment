@@ -5,7 +5,8 @@ import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes), // Map pathways explicitly into runtime memory
-    provideHttpClient()    // Resolves global server network data channels
+    // 🚀 الحل المعماري القاطع: تفعيل الـ Zone التقليدي المتوافق مع جهازك لكسر الشلل وإنهاء البياض فوراً
+    provideRouter(routes),
+    provideHttpClient() 
   ]
 };

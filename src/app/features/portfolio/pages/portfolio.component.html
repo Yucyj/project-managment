@@ -1,0 +1,48 @@
+<div class="portfolio-wrapper">
+  
+  <!-- الكروت الأربعة العلوية النظيفة لفيجما الهدف -->
+  <div class="portfolio-summary-grid">
+    <div class="summary-card"><span class="card-title-text">Total Portfolio</span><strong class="card-num-text">0</strong></div>
+    <div class="summary-card"><span class="card-title-text">Pending</span><strong class="card-num-text">0</strong></div>
+    <div class="summary-card"><span class="card-title-text">On Track</span><strong class="card-num-text">0</strong></div>
+    <div class="summary-card"><span class="card-title-text">Completed</span><strong class="card-num-text">0</strong></div>
+  </div>
+
+  <!-- حقل البحث والفلترة -->
+  <div class="table-controls-row">
+    <h2 class="section-heading-title">All portfolios</h2>
+    <div class="controls-actions-group">
+      <input type="text" class="search-input" placeholder="Search for everything" />
+      <select class="status-select"><option>Status</option></select>
+      <button class="create-portfolio-btn" type="button">+ Create Portfolio</button>
+    </div>
+  </div>
+
+  <!-- الجدول الملموم المنظم -->
+  <div class="table-responsive-container">
+    <table class="figma-data-table">
+      <thead>
+        <tr>
+          <th>Portfolio Name</th>
+          <th>Category</th>
+          <th>Programs</th>
+          <th>Projects</th>
+          <th>Owner</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="!isLoading && portfoliosList.length > 0">
+        <tr *ngFor="let item of portfoliosList">
+          <td class="primary-cell-text">{{ item.name }}</td>
+          <td>{{ item.category }}</td>
+          <td>{{ item.programs }}</td>
+          <td class="bold-cell-num">{{ item.projects }}</td>
+          <td>{{ item.owner }}</td>
+          <td><span class="status-badge-pill" [class.on-track]="item.status === 'On Track'">{{ item.status }}</span></td>
+          <td class="actions-cell-dots">•••</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

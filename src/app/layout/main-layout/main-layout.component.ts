@@ -1,69 +1,126 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
-  // 🚀 التعديل المعماري التجاري: إيقاف العزل لتمكين الـ CSS من اختراق أي كاش وإجبار الأيقونات على الانكماش فوراً
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   encapsulation: ViewEncapsulation.None,
-  templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.css',
+  template: `
+    <div class="platform-container">
+      <aside class="figma-sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-logo-container">
+            <div class="logo-dots">
+              <span class="dot blue-dot"></span>
+              <span class="dot grey-dot"></span>
+              <span class="dot grey-dot"></span>
+            </div>
+            <div class="brand-text">PS</div>
+          </div>
+          <button class="sidebar-toggle-arrow" type="button">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <button class="nav-item" routerLink="/dashboard" routerLinkActive="active" type="button">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+            <span>Dashboard</span>
+          </button>
+
+          <button class="nav-item" routerLink="/portfolio" routerLinkActive="active" type="button">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            <span>Portfolios</span>
+          </button>
+
+          <button class="nav-item" type="button">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+            <span>Programs</span>
+          </button>
+
+          <button class="nav-item" type="button">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>Projects</span>
+          </button>
+
+          <button class="nav-item" type="button">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <span>Change Requests</span>
+          </button>
+
+          <button class="nav-item" type="button">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>Navigations</span>
+          </button>
+
+          <button class="nav-item" type="button">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>Users</span>
+          </button>
+
+          <button class="nav-item" type="button">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Setting</span>
+          </button>
+        </nav>
+      </aside>
+
+      <main class="figma-main-content">
+        <header class="figma-header">
+          <h1 class="page-title">Dashboard</h1>
+          <div class="header-user-actions">
+            <div class="lang-switch-btn">
+              <svg class="globe-vector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+              <span>العربية</span>
+            </div>
+            <div class="user-profile-badge">
+              <div class="profile-avatar"></div>
+              <div class="profile-info-text">
+                <span class="user-email-label">{{ userEmail }}</span>
+                <span class="user-id-sub">{{ userPhone }}</span>
+              </div>
+              <svg class="dropdown-arrow-svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+        </header>
+
+        <div class="dashboard-viewport-render">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+    </div>
+  `,
   styles: [`
-    /* ==========================================================================
-       🔒 FIGMA VECTOR CONSTRAINTS & CORE LAYOUT POLISH (FORCE OVERRIDE)
-       ========================================================================== */
-    
-    /* 🚀 قفل الحجم: إجبار كافة الأيقونات والـ SVGs المكسورة داخل السايدبار على الانكماش الفوري لحجم 18px منعاً لانفجارها نهائياً */
-    .figma-sidebar svg, .nav-icon, svg {
-      width: 18px !important;
-      height: 18px !important;
-      max-width: 18px !important;
-      max-height: 18px !important;
-      min-width: 18px !important;
-      min-height: 18px !important;
-      flex-shrink: 0 !important;
-      display: inline-block !important;
-      color: currentColor !important;
-    }
-
-    /* إجبار السايدبار الخارجي على حجم ملموم ومحدد وثابت لفيجما الهدف الحين */
-    aside, .sidebar, .figma-sidebar {
-      width: 240px !important;
-      max-width: 240px !important;
-      min-width: 240px !important;
-      background-color: #f8fafc !important; /* درجة رمادي السايدبار بالهدف بالملي */
-      border-right: 1px solid #e2e8f0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      flex-shrink: 0 !important;
-    }
-
-    /* 🔵 تحويل كافة الكلمات ونصوص الواجهة بالكامل من الأسود المكتوم إلى الكحلي المشرق لفيجما الهدف بدقة */
-    .brand-text, .page-title, .user-email-label, .empty-state-heading, .card-label-text, .card-value-text { 
-      color: #0f2d59 !important; 
-    }
-
-    /* ضبط أبعاد وحواف الـ Active Tab للكحلي المشرق المتناسق بالصورة */
-    .nav-item.active {
-      background-color: #1e3a8a !important;
-      color: #ffffff !important;
-      border-radius: 8px !important;
-    }
+    .platform-container { display: flex !important; width: 100vw !important; height: 100vh !important; overflow: hidden !important; background-color: #ffffff !important; font-family: 'Inter', system-ui, -apple-system, sans-serif !important; }
+    .figma-sidebar { width: 240px !important; max-width: 240px !important; min-width: 240px !important; background-color: #f8fafc !important; border-right: 1px solid #e2e8f0 !important; display: flex !important; flex-direction: column !important; padding: 24px 16px !important; box-sizing: border-box !important; flex-shrink: 0 !important; position: relative !important; z-index: 9999 !important; }
+    .sidebar-brand { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 32px !important; }
+    .brand-logo-container { display: flex !important; flex-direction: column !important; gap: 4px !important; }
+    .logo-dots { display: flex !important; gap: 4px !important; }
+    .dot { width: 8px !important; height: 8px !important; border-radius: 50% !important; display: inline-block !important; }
+    .blue-dot { background-color: #1e3a8a !important; }
+    .grey-dot { background-color: #cbd5e1 !important; }
+    .brand-text { font-size: 26px !important; font-weight: 800 !important; letter-spacing: -0.03em !important; color: #0f2d59 !important; }
+    .sidebar-toggle-arrow { background: #ffffff !important; border: 1px solid #cbd5e1 !important; width: 28px !important; height: 28px !important; border-radius: 50% !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #64748b !important; }
+    .sidebar-nav { display: flex !important; flex-direction: column !important; gap: 4px !important; width: 100% !important; }
+    .nav-item { display: flex !important; align-items: center !important; gap: 12px !important; background: transparent !important; border: none !important; padding: 10px 12px !important; border-radius: 8px !important; font-size: 14px !important; font-weight: 500 !important; color: #475569 !important; width: 100% !important; text-align: start !important; cursor: pointer !important; }
+    .nav-item.active { background-color: #1e3a8a !important; color: #ffffff !important; }
     .nav-item.active span { color: #ffffff !important; }
-
-    /* مساحة العرض الرئيسية البيضاء النظيفة */
-    main, .figma-main-content, .dashboard-viewport-render {
-      background-color: #ffffff !important;
-    }
-
-    .platform-container {
-      display: flex !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      overflow: hidden !important;
-    }
+    .figma-sidebar svg, .nav-icon { width: 18px !important; height: 18px !important; flex-shrink: 0 !important; }
+    .figma-main-content { flex: 1 !important; background-color: #ffffff !important; display: flex !important; flex-direction: column !important; overflow: hidden !important; position: relative !important; z-index: 1 !important; }
+    .figma-header { height: 64px !important; border-bottom: 1px solid #f1f5f9 !important; display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 0 32px !important; flex-shrink: 0 !important; }
+    .page-title { font-size: 22px !important; font-weight: 700 !important; color: #0f2d59 !important; margin: 0 !important; }
+    .header-user-actions { display: flex !important; align-items: center !important; gap: 24px !important; }
+    .lang-switch-btn { display: flex !important; align-items: center !important; gap: 6px !important; font-size: 14px !important; color: #475569 !important; font-weight: 500 !important; }
+    .globe-vector-icon { width: 16px !important; height: 16px !important; color: #64748b !important; }
+    .user-profile-badge { display: flex !important; align-items: center !important; gap: 8px !important; }
+    .profile-avatar { width: 32px !important; height: 32px !important; background-color: #cbd5e1 !important; border-radius: 50% !important; }
+    .profile-info-text { display: flex !important; flex-direction: column !important; text-align: start !important; }
+    .user-email-label { font-size: 14px !important; font-weight: 700 !important; color: #0f2d59 !important; }
+    .user-id-sub { font-size: 11px !important; color: #94a3b8 !important; }
+    .dropdown-arrow-svg { color: #64748b !important; }
+    .dashboard-viewport-render { flex: 1 !important; overflow-y: auto !important; background-color: #ffffff !important; padding: 32px !important; box-sizing: border-box !important; position: relative !important; width: 100% !important; max-width: 100% !important; }
   `]
 })
 export class MainLayoutComponent implements OnInit {
@@ -72,9 +129,14 @@ export class MainLayoutComponent implements OnInit {
   userPhone = 'Fetching Role...';
 
   ngOnInit() {
-    const savedEmail = localStorage.getItem('username');
-    const savedPhone = localStorage.getItem('userphone');
-    if (savedEmail) this.userEmail = savedEmail;
-    if (savedPhone) this.userPhone = savedPhone;
+    const savedEmail = localStorage.getItem('username') || localStorage.getItem('name') || localStorage.getItem('email');
+    const savedPhone = localStorage.getItem('userphone') || localStorage.getItem('role') || localStorage.getItem('position');
+    
+    this.userEmail = savedEmail || 'PMO Lead';
+    this.userPhone = savedPhone || 'pmo@etmam.store';
+  }
+
+  toggleLanguage(): void {
+    this.isArabic = !this.isArabic;
   }
 }

@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'auth/login',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   },
   {
@@ -13,20 +13,25 @@ export const routes: Routes = [
   },
   {
     path: '',
+    // تحميل الهيكل الخارجي الفاخر للموقع
     loadComponent: () =>
-      import('./layout/main-layout/main-layout.component')
-        .then(component => component.MainLayoutComponent),
+      import('./layout/main-layout/main-layout.component').then(component => component.MainLayoutComponent),
     children: [
       {
         path: 'dashboard',
-        // 🚀 العودة للمسار الفرعي المعتمد لإنهاء تضارب الـ Schema
-        loadChildren: () =>
-          import('./features/dashboard/dashboard.routes').then(routes => routes.DASHBOARD_ROUTES)
+        loadComponent: () => 
+          import('./features/dashboard/pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      // 🚀 التصحيح المعماري الحاسم: قراءة الملف مباشرة من مجلد pages المتوافق مع جهازك بالملي
+      {
+        path: 'portfolio',
+        loadComponent: () => 
+          import('./features/portfolio/pages/portfolio.component').then(m => m.PortfolioComponent)
       }
     ]
   },
   {
     path: '**',
-    redirectTo: 'auth/login'
+    redirectTo: 'dashboard'
   }
 ];
