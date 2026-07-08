@@ -1,7 +1,9 @@
 <div class="portfolio-wrapper">
   
+  <!-- 1️⃣ وضع استعراض البيانات والجدول الرئيسي -->
   <ng-container *ngIf="!isCreateMode">
     
+    <!-- العدادات الذكية -->
     <div class="portfolio-summary-grid">
       <div class="summary-card">
         <span class="card-title-text">Total Portfolio</span>
@@ -21,6 +23,7 @@
       </div>
     </div>
 
+    <!-- شريط التحكم العلوي للجدول الرئيسي -->
     <div class="table-controls-row">
       <h2 class="section-heading-title">All portfolios</h2>
       <div class="controls-actions-group">
@@ -30,6 +33,7 @@
       </div>
     </div>
 
+    <!-- جدول عرض البيانات الأساسي من السيرفر -->
     <div class="table-responsive-container">
       <table class="figma-data-table">
         <thead>
@@ -43,7 +47,6 @@
             <th>Budget</th>
           </tr>
         </thead>
-        
         <tbody *ngIf="!isLoading && portfoliosList.length > 0">
           <tr *ngFor="let item of portfoliosList">
             <td class="primary-cell-text">{{ item.name }}</td>
@@ -70,93 +73,133 @@
     </div>
   </ng-container>
 
+  <!-- 2️⃣ نموذج إنشاء محفظة جديدة مطابق للسواجر والحقول الفنية المطلوبة بدون إيموجيز ملونة -->
   <ng-container *ngIf="isCreateMode">
     <div class="create-portfolio-container">
       
       <div class="form-navigation-header">
-        <h3 class="form-main-title">Portfolios</h3>
+        <h3 class="form-main-title">Create New Portfolio</h3>
         <span class="form-breadcrumb-sub">Portfolios / Create New</span>
       </div>
 
-      <form class="portfolio-dynamic-form">
+      <form [formGroup]="portfolioForm" (ngSubmit)="onSavePortfolio()" class="portfolio-dynamic-form">
         
+        <!-- حقل اسم المحفظة الحركي -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Name</label>
-          <input type="text" class="field-custom-input" placeholder="Write Here" />
+          <input type="text" formControlName="name" class="field-custom-input" placeholder="Fritz Chambers" />
         </div>
 
+        <!-- حقل الميزانية الحركي الرقمي -->
         <div class="form-input-group">
           <label class="field-custom-label">Budget</label>
-          <input type="text" class="field-custom-input" placeholder="00.0" />
+          <input type="number" formControlName="budget" class="field-custom-input" placeholder="96" />
         </div>
 
+        <!-- قائمة فئة المحفظة المنسدلة -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Category</label>
-          <div class="select-wrapper-icon">
+          <div class="input-with-icon-wrapper dropdown-arrow">
             <select class="field-custom-select">
-              <option>Execution</option>
+              <option value="Execution">Execution</option>
+              <option value="Planning">Planning</option>
             </select>
           </div>
         </div>
 
+        <!-- قائمة اختيار المالك الديناميكية المربوطة بمستخدمي السيرفر الحقيقيين -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Owner</label>
-          <div class="select-wrapper-icon">
-            <select class="field-custom-select">
-              <option>👤 Faisal Al-Otaibi</option>
+          <div class="input-with-icon-wrapper dropdown-arrow">
+            <select formControlName="ownerId" class="field-custom-select">
+              <option value="">Select owner</option>
+              <option *ngFor="let user of ownersList" [value]="user.id">
+                {{ user.fullName }}
+              </option>
             </select>
           </div>
         </div>
 
+        <!-- قائمة اختيار الكفيل الديناميكية المربوطة بمستخدمي السيرفر الحقيقيين -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Sponsor</label>
-          <div class="select-wrapper-icon">
-            <select class="field-custom-select">
-              <option>👤 Omar Al-Harbi</option>
+          <div class="input-with-icon-wrapper dropdown-arrow">
+            <select formControlName="sponsorId" class="field-custom-select">
+              <option value="">Select sponsor</option>
+              <option *ngFor="let user of sponsorsList" [value]="user.id">
+                {{ user.fullName }}
+              </option>
             </select>
           </div>
         </div>
 
+        <!-- قائمة اختيار المدير المسؤول الديناميكية المربوطة بمستخدمي السيرفر الحقيقيين -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Manager</label>
-          <div class="select-wrapper-icon">
-            <select class="field-custom-select">
-              <option>👤 Mahmoud Salah</option>
+          <div class="input-with-icon-wrapper dropdown-arrow">
+            <select formControlName="managerId" class="field-custom-select">
+              <option value="">Select manager</option>
+              <option *ngFor="let user of managersList" [value]="user.id">
+                {{ user.fullName }}
+              </option>
             </select>
           </div>
         </div>
 
-        <div class="form-input-group full-width-field">
+        <!-- حقل الوصف النصي الممتد -->
+        <div class="form-input-group">
           <label class="field-custom-label">Description</label>
-          <textarea class="field-custom-textarea" placeholder="Write Here"></textarea>
+          <textarea formControlName="description" class="field-custom-textarea" placeholder="Deleniti quasi provi"></textarea>
         </div>
 
+        <!-- نافذة نظام التنبيهات الجانبية المطابقة لتصميم شاشتك الفعلي -->
+        <div class="form-input-group text-alert-placeholder-zone">
+          <div class="system-no-users-alert-box">
+            <span class="alert-inline-text">No users found</span>
+          </div>
+        </div>
+
+        <!-- حاوية المرفقات السفلية المزدوجة النظيفة تماماً من أي إيموجيز مكسورة -->
         <div class="form-input-group full-width-field">
           <label class="field-custom-label">Attach File</label>
           <div class="attachment-dual-zone">
             
             <div class="drag-drop-area-box">
-              <div class="cloud-upload-icon-blue">📁</div>
+              <div class="custom-svg-cloud-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
+                  <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#0f2d59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15" stroke="#0f2d59" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
               <p class="drag-zone-text-primary">Drag your file(s) to start uploading</p>
               <span class="drag-zone-text-separator">OR</span>
-              <button type="button" class="upload-trigger-action-btn">📤 Upload</button>
-              <p class="drag-zone-text-restrictions">You can upload up to 5 files max<br>Only support .jpg, .png, .svg and .zip files</p>
+              <button type="button" class="upload-trigger-action-btn">Upload</button>
+              <p class="drag-zone-text-restrictions">You can upload up to 5 files max</p>
             </div>
 
             <div class="empty-attachment-preview-box">
-              <div class="no-file-alert-icon">❌</div>
+              <div class="custom-svg-error-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
+                  <rect x="4" y="2" width="16" height="20" rx="2" stroke="#cbd5e1" stroke-width="2"/>
+                  <path d="M12 18H8M16 14H8M16 10H8" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
               <p class="no-file-text-indicator">No Attachment</p>
             </div>
 
           </div>
         </div>
 
+        <!-- شريط أزرار العمليات والتخزين الحقيقي في أسفل شاشة النموذج -->
         <div class="form-actions-footer-row">
-          <button type="button" class="form-cancel-dismiss-btn" (click)="closeCreateForm()">❌ Cancel</button>
-          <button type="submit" class="form-submit-success-btn">✨ Add New</button>
+          <button type="button" class="form-cancel-dismiss-btn" (click)="closeCreateForm()">Cancel</button>
+          <button type="submit" [disabled]="isSubmitting" class="form-submit-success-btn">
+            {{ isSubmitting ? 'Saving...' : 'Add New' }}
+          </button>
         </div>
 
       </form>
+
     </div>
   </ng-container>
 
