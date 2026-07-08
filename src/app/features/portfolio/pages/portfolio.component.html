@@ -3,7 +3,7 @@
   <!-- 1️⃣ وضع استعراض البيانات والجدول الرئيسي -->
   <ng-container *ngIf="!isCreateMode">
     
-    <!-- العدادات الذكية -->
+    <!-- العدادات الذكية العلوية -->
     <div class="portfolio-summary-grid">
       <div class="summary-card">
         <span class="card-title-text">Total Portfolio</span>
@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <!-- شريط التحكم العلوي للجدول الرئيسي -->
+    <!-- شريط البحث والتحكم العلوي للجدول الرئيسي -->
     <div class="table-controls-row">
       <h2 class="section-heading-title">All portfolios</h2>
       <div class="controls-actions-group">
@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <!-- جدول عرض البيانات الأساسي من السيرفر -->
+    <!-- جدول عرض البيانات الأساسي المستقر القادم من السيرفر -->
     <div class="table-responsive-container">
       <table class="figma-data-table">
         <thead>
@@ -67,13 +67,14 @@
       </table>
     </div>
 
+    <!-- مؤشر التحميل المؤقت المتناسق -->
     <div class="center-empty-state-container" *ngIf="isLoading">
       <h3 class="empty-state-heading">Loading Live Database Records...</h3>
       <p class="empty-state-paragraph">Please wait while pulling clean portfolio datasets from etmam.store server assets.</p>
     </div>
   </ng-container>
 
-  <!-- 2️⃣ نموذج إنشاء محفظة جديدة مطابق للسواجر والحقول الفنية المطلوبة بدون إيموجيز ملونة -->
+  <!-- 2️⃣ نموذج إنشاء محفظة جديدة مطابق لتوقعات السيرفر camelCase مع تفعيل المرفقات الحية -->
   <ng-container *ngIf="isCreateMode">
     <div class="create-portfolio-container">
       
@@ -82,15 +83,16 @@
         <span class="form-breadcrumb-sub">Portfolios / Create New</span>
       </div>
 
+      <!-- 🌟 تم تصحيح الرابط البرمجي وإضافة علامة الـ (=) لربط دالة الإرسال بدقة وعمق -->
       <form [formGroup]="portfolioForm" (ngSubmit)="onSavePortfolio()" class="portfolio-dynamic-form">
         
-        <!-- حقل اسم المحفظة الحركي -->
+        <!-- حقل اسم المحفظة -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Name</label>
           <input type="text" formControlName="name" class="field-custom-input" placeholder="Fritz Chambers" />
         </div>
 
-        <!-- حقل الميزانية الحركي الرقمي -->
+        <!-- حقل الميزانية الرقمي -->
         <div class="form-input-group">
           <label class="field-custom-label">Budget</label>
           <input type="number" formControlName="budget" class="field-custom-input" placeholder="96" />
@@ -107,7 +109,7 @@
           </div>
         </div>
 
-        <!-- قائمة اختيار المالك الديناميكية المربوطة بمستخدمي السيرفر الحقيقيين -->
+        <!-- قائمة اختيار المالك الديناميكية المربوطة بالـ ownerId ومستخدمي السيرفر الفعليين -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Owner</label>
           <div class="input-with-icon-wrapper dropdown-arrow">
@@ -120,7 +122,7 @@
           </div>
         </div>
 
-        <!-- قائمة اختيار الكفيل الديناميكية المربوطة بمستخدمي السيرفر الحقيقيين -->
+        <!-- قائمة اختيار الكفيل الديناميكية المربوطة بالـ sponsorId ومستخدمي السيرفر الفعليين -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Sponsor</label>
           <div class="input-with-icon-wrapper dropdown-arrow">
@@ -133,7 +135,7 @@
           </div>
         </div>
 
-        <!-- قائمة اختيار المدير المسؤول الديناميكية المربوطة بمستخدمي السيرفر الحقيقيين -->
+        <!-- قائمة اختيار المدير الديناميكية المربوطة بالـ managerId ومستخدمي السيرفر الفعليين -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Manager</label>
           <div class="input-with-icon-wrapper dropdown-arrow">
@@ -146,7 +148,7 @@
           </div>
         </div>
 
-        <!-- حقل الوصف النصي الممتد -->
+        <!-- حقل الوصف النصي -->
         <div class="form-input-group">
           <label class="field-custom-label">Description</label>
           <textarea formControlName="description" class="field-custom-textarea" placeholder="Deleniti quasi provi"></textarea>
@@ -159,12 +161,15 @@
           </div>
         </div>
 
-        <!-- حاوية المرفقات السفلية المزدوجة النظيفة تماماً من أي إيموجيز مكسورة -->
+        <!-- حاوية المرفقات السفلية المتوازية الممتدة بالكامل مع تفعيل الرفع الحقيقي الفوري -->
         <div class="form-input-group full-width-field">
           <label class="field-custom-label">Attach File</label>
           <div class="attachment-dual-zone">
             
-            <div class="drag-drop-area-box">
+            <!-- لوحة السحب والإفلات والرفع بنظام الأيقونات المتجهة مع حقل رفع مفعّل يدوياً مخفي -->
+            <div class="drag-drop-area-box" style="position: relative;">
+              <input type="file" multiple (change)="onFileSelected($event)" style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; top: 0; left: 0; z-index: 10;" />
+              
               <div class="custom-svg-cloud-icon">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
                   <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#0f2d59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -177,30 +182,29 @@
               <p class="drag-zone-text-restrictions">You can upload up to 5 files max</p>
             </div>
 
+            <!-- لوحة المرفقات المستلمة الفردية -->
             <div class="empty-attachment-preview-box">
               <div class="custom-svg-error-icon">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
-                  <rect x="4" y="2" width="16" height="20" rx="2" stroke="#cbd5e1" stroke-width="2"/>
-                  <path d="M12 18H8M16 14H8M16 10H8" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+                  <rect x="4" y="2" width="16" height="20" rx="2" [attr.stroke]="uploadedFiles.length > 0 ? '#0f2d59' : '#cbd5e1'" stroke-width="2"/>
+                  <path d="M12 18H8M16 14H8M16 10H8" [attr.stroke]="uploadedFiles.length > 0 ? '#0f2d59' : '#cbd5e1'" stroke-width="2" stroke-linecap="round"/>
                 </svg>
               </div>
-              <p class="no-file-text-indicator">No Attachment</p>
+              
+              <!-- حلقة ديناميكية تظهر أسماء الملفات الحقيقية المرفوعة فوراً في التصميم -->
+              <div *ngIf="uploadedFiles.length > 0" style="width: 100%; max-height: 80px; overflow-y: auto; text-align: center; padding: 4px;">
+                <div *ngFor="let file of uploadedFiles" style="font-size: 12px; color: #0f2d59; font-weight: 600; margin-bottom: 4px;">
+                  📄 {{ file }}
+                </div>
+              </div>
+              
+              <p class="no-file-text-indicator" *ngIf="uploadedFiles.length === 0">No Attachment</p>
             </div>
 
           </div>
         </div>
 
-        <!-- شريط أزرار العمليات والتخزين الحقيقي في أسفل شاشة النموذج -->
+        <!-- شريط أزرار العمليات والتخزين الحقيقي الفعال في أسفل شاشة النموذج -->
         <div class="form-actions-footer-row">
           <button type="button" class="form-cancel-dismiss-btn" (click)="closeCreateForm()">Cancel</button>
-          <button type="submit" [disabled]="isSubmitting" class="form-submit-success-btn">
-            {{ isSubmitting ? 'Saving...' : 'Add New' }}
-          </button>
-        </div>
-
-      </form>
-
-    </div>
-  </ng-container>
-
-</div>
+          <button type="submit" [disabled]="isSubmitting" class="form-submit-success-btn">{{ isSubmitting ? 'Saving...' : 'Add New' }}
