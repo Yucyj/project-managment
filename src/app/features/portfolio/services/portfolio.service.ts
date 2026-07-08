@@ -35,6 +35,33 @@ export interface SwaggerApiResponse {
   data: any; 
 }
 
+// 🚀 Interfaces الجديدة لمطابقة تفاصيل المحفظة والـ JSON الفعلي بالملي
+export interface ProgramItem {
+  id: number;
+  name: string;
+  projectsCount: number;
+  tasksCount: number;
+  projectOwner: string[];
+  statusProject: number;
+}
+
+export interface PortfolioDetailInfo {
+  id: number;
+  budget: number;
+  name: string;
+  createdDate: string;
+  ownerName: string;
+  managerName: string;
+  sponsorName: string;
+  creationDate: string;
+}
+
+export interface PortfolioDetailsData {
+  programs: ProgramItem[];
+  portfolio: PortfolioDetailInfo;
+  items: { pageSize: number; pageNumbers: number };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -50,6 +77,11 @@ export class PortfolioService {
   // جلب أدوار النظام ومستخدميها
   getRolesDropdown(): Observable<SwaggerApiResponse> {
     return this.http.get<SwaggerApiResponse>(`${this.baseUrl}/api/Auth/roles/dropdown`);
+  }
+
+  // 🔄 دالة حية لجلب تفاصيل المحفظة والمشاريع التابعة لها بالاعتماد على الـ id والـ Pagination
+  getPortfolioDetails(id: number, pageNom: number = 1, pageSize: number = 10): Observable<SwaggerApiResponse> {
+    return this.http.get<SwaggerApiResponse>(`${this.baseUrl}/api/portfolio/details?id=${id}&pageSize=${pageSize}&pageNom=${pageNom}`);
   }
 
   // معالج الإرسال النهائي المحمي ضد الـ 400

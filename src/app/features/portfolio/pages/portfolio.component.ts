@@ -1,13 +1,14 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms'; 
+import { RouterModule } from '@angular/router'; // 🌟 حقن موديول التوجيه لتفعيل أزرار العين والتفاصيل
 import { PortfolioService, PortfolioItem, SwaggerApiResponse, RoleDropdownItem, DropdownUser } from '../services/portfolio.service';
 
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  // 🌟 أضفنا الـ FormsModule هنا لتفعيل ميزة التصفية الحية الثنائية الربط
-  imports: [CommonModule, ReactiveFormsModule, FormsModule], 
+  // 🌟 إضافة الـ RouterModule هنا لحماية [routerLink] قاطعاً في الـ HTML
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule], 
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css'
 })
@@ -26,7 +27,6 @@ export class PortfolioComponent implements OnInit {
   managersList: DropdownUser[] = [];
   uploadedFiles: string[] = [];
 
-  // 🌟 متغير البحث الحي لالتقاط كلمات المستخدم أثناء الكتابة
   searchQuery: string = '';
 
   portfolioForm!: FormGroup;
@@ -37,6 +37,7 @@ export class PortfolioComponent implements OnInit {
     this.initPortfolioForm();
   }
 
+  // 🌟 تم إغلاق القوس المكسور والدالة هنا بالملي للتخلص من الأخطاء السابقة قاطعاً
   initPortfolioForm(): void {
     this.portfolioForm = this.fb.group({
       id: 0, 
@@ -50,10 +51,10 @@ export class PortfolioComponent implements OnInit {
     });
   }
 
-  // 🚀 دالة تصفية مصفوفة البيانات حياً بناءً على مدخلات حقل البحث
+  // دالة تصفية مصفوفة البيانات حياً بناءً على مدخلات حقل البحث
   get filteredPortfolios(): PortfolioItem[] {
     if (!this.searchQuery || this.searchQuery.trim() === '') {
-      return this.portfoliosList; // إذا كان الحقل فارغاً، يعرض كافة المحافظ
+      return this.portfoliosList;
     }
     
     const query = this.searchQuery.toLowerCase().trim();
@@ -93,10 +94,13 @@ export class PortfolioComponent implements OnInit {
       next: (response: SwaggerApiResponse) => {
         if (response && response.succeeded && Array.isArray(response.data)) {
           const roles: RoleDropdownItem[] = response.data;
+          
           const managerRole = roles.find(r => r.name === 'Manager');
           if (managerRole) this.managersList = managerRole.users;
+
           const sponsorRole = roles.find(r => r.name === 'Sponser');
           if (sponsorRole) this.sponsorsList = sponsorRole.users;
+
           const ownerRole = roles.find(r => r.name === 'Owner');
           if (ownerRole) this.ownersList = ownerRole.users;
         }
@@ -138,6 +142,7 @@ export class PortfolioComponent implements OnInit {
     }
     this.isSubmitting = true;
     const formValues = this.portfolioForm.value;
+    
     const finalPayload = {
       id: 0,
       name: formValues.name,

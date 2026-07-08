@@ -29,6 +29,11 @@ export const routes: Routes = [
         path: 'portfolio',
         loadComponent: () => 
           import('./features/portfolio/pages/portfolio.component').then(m => m.PortfolioComponent)
+      },
+      {
+        path: 'portfolio/details/:id',
+        loadComponent: () => 
+          import('./features/portfolio/portfolio-details/portfolio-details.component').then(m => m.PortfolioDetailsComponent)
       }
     ]
   },

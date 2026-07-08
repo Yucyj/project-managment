@@ -27,14 +27,13 @@
     <div class="table-controls-row">
       <h2 class="section-heading-title">All portfolios</h2>
       <div class="controls-actions-group">
-        <!-- 🌟 تفعيل حقل البحث الحي بربط ثنائي الاتجاه يقرأ حركياً أثناء الكتابة -->
         <input type="text" class="search-input" placeholder="Search for everything" [(ngModel)]="searchQuery" />
         <select class="status-select"><option>Status</option></select>
         <button class="create-portfolio-btn" type="button" (click)="openCreateForm()">+ Create Portfolio</button>
       </div>
     </div>
 
-    <!-- جدول عرض البيانات الأساسي المستقر المربوط بالمصفوفة المفلترة الحية -->
+    <!-- جدول عرض البيانات الأساسي المستقر القادم من السيرفر مضافاً إليه العين -->
     <div class="table-responsive-container">
       <table class="figma-data-table">
         <thead>
@@ -46,37 +45,44 @@
             <th>Owner Email</th>
             <th>Status</th>
             <th>Budget</th>
+            <th style="text-align: center;">Actions</th>
           </tr>
         </thead>
-        <!-- 🌟 تم تحويل الحيازة البرمجية لتقرأ مباشرة من دالة الفرز filteredPortfolios -->
         <tbody *ngIf="!isLoading && filteredPortfolios.length > 0">
           <tr *ngFor="let item of filteredPortfolios">
             <td class="primary-cell-text">{{ item.name }}</td>
             <td>{{ item.description || 'No Description Available' }}</td>
-            <td>{{ item.managerName || 'Not Assigned' }}</td>
+            <td>{{ item.managerName }}</td>
             <td class="bold-cell-num">{{ item.projectsCount }}</td>
             <td>{{ item.ownerName }}</td>
             <td>
-              <span class="status-badge-pill" [class.on-track]="item.status === null">
+              <span class="status-badge-pill" [class.on-track]="item.status === 'Active' || item.status === null">
                 {{ item.status || 'Active' }}
               </span>
             </td>
             <td class="bold-cell-num" style="color: #1e3a8a;">
               {{ item.budget | number }} SAR
             </td>
+            <td style="text-align: center;">
+              <button type="button" [routerLink]="['/portfolio/details', item.id]" class="view-details-eye-btn" style="background: none; border: none; cursor: pointer; padding: 4px; color: #0f2d59;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- مؤشر التحميل المؤقت المتناسق -->
     <div class="center-empty-state-container" *ngIf="isLoading">
       <h3 class="empty-state-heading">Loading Live Database Records...</h3>
       <p class="empty-state-paragraph">Please wait while pulling clean portfolio datasets from etmam.store server assets.</p>
     </div>
   </ng-container>
 
-  <!-- 2️⃣ نموذج إنشاء محفظة جديدة مطابق لتوقعات السيرفر camelCase مع تفعيل المرفقات الحية -->
+  <!-- 2️⃣ نموذج إنشاء محفظة جديدة مطابق لتوقعات السيرفر لمنع البياض -->
   <ng-container *ngIf="isCreateMode">
     <div class="create-portfolio-container">
       
@@ -85,22 +91,18 @@
         <span class="form-breadcrumb-sub">Portfolios / Create New</span>
       </div>
 
-      <!-- ربط عناصر الإرسال بالفورم والـ Controls المعتمدة لتفادي الـ 400 -->
       <form [formGroup]="portfolioForm" (ngSubmit)="onSavePortfolio()" class="portfolio-dynamic-form">
         
-        <!-- حقل اسم المحفظة -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Name</label>
           <input type="text" formControlName="name" class="field-custom-input" placeholder="Fritz Chambers" />
         </div>
 
-        <!-- حقل الميزانية الرقمي -->
         <div class="form-input-group">
           <label class="field-custom-label">Budget</label>
           <input type="number" formControlName="budget" class="field-custom-input" placeholder="96" />
         </div>
 
-        <!-- قائمة فئة المحفظة المنسدلة -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Category</label>
           <div class="input-with-icon-wrapper dropdown-arrow">
@@ -111,100 +113,79 @@
           </div>
         </div>
 
-        <!-- قائمة اختيار المالك الديناميكية المربوطة بالـ ownerId ومستخدمي السيرفر الفعليين -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Owner</label>
           <div class="input-with-icon-wrapper dropdown-arrow">
             <select formControlName="ownerId" class="field-custom-select">
               <option value="">Select owner</option>
-              <option *ngFor="let user of ownersList" [value]="user.id">
-                {{ user.fullName }}
-              </option>
+              <option *ngFor="let user of ownersList" [value]="user.id">{{ user.fullName }}</option>
             </select>
           </div>
         </div>
 
-        <!-- قائمة اختيار الكفيل الديناميكية المربوطة بالـ sponsorId ومستخدمي السيرفر الفعليين -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Sponsor</label>
           <div class="input-with-icon-wrapper dropdown-arrow">
             <select formControlName="sponsorId" class="field-custom-select">
               <option value="">Select sponsor</option>
-              <option *ngFor="let user of sponsorsList" [value]="user.id">
-                {{ user.fullName }}
-              </option>
+              <option *ngFor="let user of sponsorsList" [value]="user.id">{{ user.fullName }}</option>
             </select>
           </div>
         </div>
 
-        <!-- قائمة اختيار المدير الديناميكية المربوطة بالـ managerId ومستخدمي السيرفر الفعليين -->
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Manager</label>
           <div class="input-with-icon-wrapper dropdown-arrow">
             <select formControlName="managerId" class="field-custom-select">
               <option value="">Select manager</option>
-              <option *ngFor="let user of managersList" [value]="user.id">
-                {{ user.fullName }}
-              </option>
+              <option *ngFor="let user of managersList" [value]="user.id">{{ user.fullName }}</option>
             </select>
           </div>
         </div>
 
-        <!-- حقل الوصف النصي -->
         <div class="form-input-group">
           <label class="field-custom-label">Description</label>
           <textarea formControlName="description" class="field-custom-textarea" placeholder="Deleniti quasi provi"></textarea>
         </div>
 
-        <!-- نافذة نظام التنبيهات الجانبية المطابقة لتصميم شاشتك الفعلي -->
         <div class="form-input-group text-alert-placeholder-zone">
           <div class="system-no-users-alert-box">
             <span class="alert-inline-text">No users found</span>
           </div>
         </div>
 
-        <!-- حاوية المرفقات السفلية المتوازية الممتدة بالكامل مع تفعيل الرفع الحقيقي الفوري -->
         <div class="form-input-group full-width-field">
           <label class="field-custom-label">Attach File</label>
           <div class="attachment-dual-zone">
-            
-            <!-- لوحة السحب والإفلات والرفع بنظام الأيقونات المتجهة مع حقل رفع مفعّل يدوياً مخفي -->
             <div class="drag-drop-area-box" style="position: relative;">
               <input type="file" multiple (change)="onFileSelected($event)" style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; top: 0; left: 0; z-index: 10;" />
-              
               <div class="custom-svg-cloud-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
-                  <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#0f2d59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15" stroke="#0f2d59" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org"><path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#0f2d59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15" stroke="#0f2d59" stroke-width="2" stroke-linecap="round"/></svg>
               </div>
               <p class="drag-zone-text-primary">Drag your file(s) to start uploading</p>
               <span class="drag-zone-text-separator">OR</span>
               <button type="button" class="upload-trigger-action-btn">Upload</button>
               <p class="drag-zone-text-restrictions">You can upload up to 5 files max</p>
             </div>
-
-            <!-- لوحة المرفقات المستلمة الفردية -->
             <div class="empty-attachment-preview-box">
               <div class="custom-svg-error-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
-                  <rect x="4" y="2" width="16" height="20" rx="2" [attr.stroke]="uploadedFiles.length > 0 ? '#0f2d59' : '#cbd5e1'" stroke-width="2"/>
-                  <path d="M12 18H8M16 14H8M16 10H8" [attr.stroke]="uploadedFiles.length > 0 ? '#0f2d59' : '#cbd5e1'" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org"><rect x="4" y="2" width="16" height="20" rx="2" [attr.stroke]="uploadedFiles.length > 0 ? '#0f2d59' : '#cbd5e1'" stroke-width="2"/><path d="M12 18H8M16 14H8M16 10H8" [attr.stroke]="uploadedFiles.length > 0 ? '#0f2d59' : '#cbd5e1'" stroke-width="2" stroke-linecap="round"/></svg>
               </div>
-              
-              <!-- حلقة ديناميكية تظهر أسماء الملفات الحقيقية المرفوعة فوراً في التصميم -->
               <div *ngIf="uploadedFiles.length > 0" style="width: 100%; max-height: 80px; overflow-y: auto; text-align: center; padding: 4px;">
-                <div *ngFor="let file of uploadedFiles" style="font-size: 12px; color: #0f2d59; font-weight: 600; margin-bottom: 4px;">
-                  📄 {{ file }}
-                </div>
+                <div *ngFor="let file of uploadedFiles" style="font-size: 12px; color: #0f2d59; font-weight: 600; margin-bottom: 4px;">📄 {{ file }}</div>
               </div>
-              
               <p class="no-file-text-indicator" *ngIf="uploadedFiles.length === 0">No Attachment</p>
             </div>
-
           </div>
         </div>
 
-        <!-- شريط أزرار العمليات والتخزين الحقيقي الفعال في أسفل شاشة النموذج -->
-            <button type="button" class="form-cancel-dismiss-btn" (click)="closeCreateForm()">Cancel<button type="submit" [disabled]="isSubmitting" class="form-submit-success-btn">{{ isSubmitting ? 'Saving...' : 'Add New' }}
+        <div class="form-actions-footer-row">
+          <button type="button" class="form-cancel-dismiss-btn" (click)="closeCreateForm()">Cancel</button>
+          <button type="submit" [disabled]="isSubmitting" class="form-submit-success-btn">{{ isSubmitting ? 'Saving...' : 'Add New' }}</button>
+        </div>
+
+      </form>
+    </div>
+  </ng-container>
+
+</div>

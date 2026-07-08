@@ -1,0 +1,130 @@
+<div class="details-dashboard-wrapper" *ngIf="!isLoading && detailsData">
+
+  <!-- الهيدر والمسار العلوي للملف -->
+  <div class="details-top-navigation-row">
+    <h2 class="main-program-title">{{ detailsData.portfolio.name || 'Smart Systems Program' }}</h2>
+    <span class="breadcrumb-sub-text">Portfolios / Portfolio Details</span>
+  </div>
+
+  <!-- لوحة الكروت الثلاثية للحالات والاعتمادات الإدارية الحية -->
+  <div class="approval-cards-grid-row">
+    
+    <!-- كرت المالك الإداري -->
+    <div class="actor-status-card">
+      <div class="actor-info-left">
+        <div class="vector-user-avatar-placeholder"></div>
+        <div class="actor-text-meta">
+          <strong class="actor-full-name">{{ detailsData.portfolio.ownerName | slice:0:15 }}...</strong>
+          <span class="actor-role-label">Portfolio Owner</span>
+        </div>
+      </div>
+      <div class="actor-date-right-status">
+        <span class="action-timestamp-text">{{ detailsData.portfolio.creationDate }}</span>
+        <div class="status-badge-inline approved-tag">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right: 4px;">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Approved
+        </div>
+      </div>
+    </div>
+
+    <!-- كرت الكفيل أو الراعي للمحفظة -->
+    <div class="actor-status-card">
+      <div class="actor-info-left">
+        <div class="vector-user-avatar-placeholder"></div>
+        <div class="actor-text-meta">
+          <strong class="actor-full-name">{{ detailsData.portfolio.sponsorName | slice:0:15 }}...</strong>
+          <span class="actor-role-label">Portfolio Sponsor</span>
+        </div>
+      </div>
+      <div class="actor-date-right-status">
+        <span class="action-timestamp-text">{{ detailsData.portfolio.creationDate }}</span>
+        <!-- 🌟 تم تجميع كود الـ circle بداخل الـ svg هندسياً لحل مشكلة NG8001 قاطعاً -->
+        <div class="status-badge-inline pending-tag">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="margin-right: 4px;">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"></circle>
+          </svg>
+          Pending
+        </div>
+      </div>
+    </div>
+
+    <!-- كرت المدير المسؤول -->
+    <div class="actor-status-card">
+      <div class="actor-info-left">
+        <div class="vector-user-avatar-placeholder"></div>
+        <div class="actor-text-meta">
+          <strong class="actor-full-name">{{ detailsData.portfolio.managerName | slice:0:15 }}...</strong>
+          <span class="actor-role-label">Portfolio Manager</span>
+        </div>
+      </div>
+      <div class="actor-date-right-status">
+        <span class="action-timestamp-text">{{ detailsData.portfolio.creationDate }}</span>
+        <div class="status-badge-inline refusing-tag">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right: 4px;">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Refusing
+        </div>
+      </div>
+    </div>
+
+    <!-- كرت نسبة الإنجاز الجانبي المستقل -->
+    <div class="progress-radial-card">
+      <div class="progress-meta-text-block">
+        <strong class="progress-status-heading">Pending</strong>
+        <span class="progress-sub-caption">In Progress</span>
+      </div>
+      <div class="progress-percentage-numeric-badge">0%</div>
+    </div>
+
+  </div>
+
+  <!-- لوحة المستطيلات الأفقية للمشاريع والميزانية الحية -->
+  <div class="metrics-horizontal-strip-row">
+    <div class="metric-strip-block">
+      <span class="metric-strip-label">Projects:</span>
+      <strong class="metric-strip-value">{{ detailsData.programs.length }}</strong>
+    </div>
+    <div class="metric-strip-block">
+      <span class="metric-strip-label">Tasks:</span>
+      <strong class="metric-strip-value">50</strong>
+    </div>
+    <div class="metric-strip-block highlight-blue-budget">
+      <span class="metric-strip-label">Budget:</span>
+      <strong class="metric-strip-value">{{ detailsData.portfolio.budget | number }} SAR</strong>
+    </div>
+  </div>
+
+  <!-- حاوية المستندات المرفوعة -->
+  <div class="documents-section-card-panel">
+    <h4 class="section-panel-heading-text">Documents:</h4>
+    <div class="documents-thumbnails-flex-row">
+      <div class="document-thumbnail-item">
+        <div class="file-type-icon-box doc-blue-theme">DOC</div>
+        <span class="file-name-caption-text">topic_doc</span>
+      </div>
+      <div class="document-thumbnail-item">
+        <div class="file-type-icon-box pdf-red-theme">PDF</div>
+        <span class="file-name-caption-text">topic_pdf</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- حاوية الوصف النصي الممتد -->
+  <div class="description-section-card-panel">
+    <h4 class="section-panel-heading-text">Description</h4>
+    <p class="description-paragraph-body-text">
+      {{ detailsData.portfolio.description || 'No Description Available' }}
+    </p>
+  </div>
+
+</div>
+
+<!-- شاشة التحميل الحركي المعزول -->
+<div class="center-empty-state-container" *ngIf="isLoading">
+  <h3 class="empty-state-heading">Fetching Live Portfolio Database Assets...</h3>
+  <p class="empty-state-paragraph">Please wait while parsing dataset response streams.</p>
+</div>

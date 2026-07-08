@@ -1,0 +1,229 @@
+.details-dashboard-wrapper {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-family: 'Inter', sans-serif !important;
+  padding: 8px 16px !important;
+}
+
+.details-top-navigation-row {
+  text-align: start !important;
+  margin-bottom: 24px !important;
+}
+
+.main-program-title {
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  color: #0f2d59 !important;
+  margin: 0 0 4px 0 !important;
+}
+
+.breadcrumb-sub-text {
+  font-size: 13px !important;
+  color: #64748b !important;
+  font-weight: 500 !important;
+}
+
+.approval-cards-grid-row {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) 220px !important;
+  gap: 16px !important;
+  margin-bottom: 24px !important;
+}
+
+.actor-status-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.actor-info-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.vector-user-avatar-placeholder {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  background-color: #cbd5e1 !important;
+}
+
+.actor-text-meta {
+  display: flex !important;
+  flex-direction: column !important;
+  text-align: start !important;
+}
+
+.actor-full-name {
+  font-size: 14px !important;
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+.actor-role-label {
+  font-size: 12px !important;
+  color: #94a3b8 !important;
+  font-weight: 500 !important;
+}
+
+.actor-date-right-status {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 8px !important;
+}
+
+.action-timestamp-text {
+  font-size: 11px !important;
+  color: #cbd5e1 !important;
+  font-weight: 600 !important;
+}
+
+.status-badge-inline {
+  display: flex !important;
+  align-items: center !important;
+  padding: 4px 10px !important;
+  border-radius: 20px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+.approved-tag { 
+  background: #ecfdf5 !important; 
+  color: #059669 !important; 
+}
+
+.pending-tag { 
+  background: #fffbeb !important; 
+  color: #d97706 !important; 
+  border: 1px solid #fef3c7 !important; 
+}
+
+.refusing-tag { 
+  background: #fef2f2 !important; 
+  color: #dc2626 !important; 
+}
+
+.progress-radial-card {
+  background: #ffffff !important;
+  border: 1px solid #f59e0b !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.progress-meta-text-block {
+  display: flex !important;
+  flex-direction: column !important;
+  text-align: start !important;
+}
+
+.progress-status-heading {
+  font-size: 14px !important;
+  color: #d97706 !important;
+  font-weight: 800 !important;
+}
+
+.progress-sub-caption {
+  font-size: 12px !important;
+  color: #b45309 !important;
+  font-weight: 600;
+}
+
+.progress-percentage-numeric-badge {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  color: #d97706 !important;
+}
+
+.metrics-horizontal-strip-row {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 20px !important;
+  margin-bottom: 28px !important;
+}
+
+.metric-strip-block {
+  background: #ffffff !important;
+  border: 1px solid #0f2d59 !important;
+  border-radius: 8px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font-size: 14px !important;
+  color: #334155 !important;
+}
+
+.metric-strip-label { font-weight: 600 !important; }
+.metric-strip-value { font-weight: 800 !important; color: #0f2d59 !important; }
+
+.highlight-blue-budget {
+  background: #ffffff !important;
+  border-color: #0f2d59 !important;
+}
+
+.documents-section-card-panel, .description-section-card-panel {
+  background: #ffffff !important;
+  border: 1px solid #eaecf0 !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  margin-bottom: 24px !important;
+  text-align: start !important;
+}
+
+.section-panel-heading-text {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #334155 !important;
+  margin: 0 0 16px 0 !important;
+}
+
+.documents-thumbnails-flex-row {
+  display: flex !important;
+  gap: 16px !important;
+}
+
+.document-thumbnail-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+}
+
+.file-type-icon-box {
+  width: 44px !important;
+  height: 48px !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+}
+
+.doc-blue-theme { background-color: #2563eb !important; }
+.pdf-red-theme { background-color: #dc2626 !important; }
+
+.file-name-caption-text {
+  font-size: 11px !important;
+  color: #64748b !important;
+  font-weight: 600 !important;
+}
+
+.description-paragraph-body-text {
+  font-size: 14px !important;
+  color: #64748b !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+}
