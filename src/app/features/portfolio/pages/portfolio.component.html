@@ -1,74 +1,163 @@
 <div class="portfolio-wrapper">
   
-  <!-- 📊 العدادات الفوقية تقرأ ديناميكياً عدد المحافظ الحية الراجعة من السيرفر -->
-  <div class="portfolio-summary-grid">
-    <div class="summary-card">
-      <span class="card-title-text">Total Portfolio</span>
-      <strong class="card-num-text">{{ portfoliosList.length }}</strong>
+  <ng-container *ngIf="!isCreateMode">
+    
+    <div class="portfolio-summary-grid">
+      <div class="summary-card">
+        <span class="card-title-text">Total Portfolio</span>
+        <strong class="card-num-text">{{ portfoliosList.length }}</strong>
+      </div>
+      <div class="summary-card">
+        <span class="card-title-text">Pending</span>
+        <strong class="card-num-text">0</strong>
+      </div>
+      <div class="summary-card">
+        <span class="card-title-text">On Track</span>
+        <strong class="card-num-text">{{ portfoliosList.length }}</strong>
+      </div>
+      <div class="summary-card">
+        <span class="card-title-text">Completed</span>
+        <strong class="card-num-text">0</strong>
+      </div>
     </div>
-    <div class="summary-card">
-      <span class="card-title-text">Pending</span>
-      <strong class="card-num-text">0</strong>
-    </div>
-    <div class="summary-card">
-      <span class="card-title-text">On Track</span>
-      <strong class="card-num-text">{{ portfoliosList.length }}</strong>
-    </div>
-    <div class="summary-card">
-      <span class="card-title-text">Completed</span>
-      <strong class="card-num-text">0</strong>
-    </div>
-  </div>
 
-  <!-- شريط البحث والتحكم لفيجما -->
-  <div class="table-controls-row">
-    <h2 class="section-heading-title">All portfolios</h2>
-    <div class="controls-actions-group">
-      <input type="text" class="search-input" placeholder="Search for everything" />
-      <select class="status-select"><option>Status</option></select>
-      <button class="create-portfolio-btn" type="button">+ Create Portfolio</button>
+    <div class="table-controls-row">
+      <h2 class="section-heading-title">All portfolios</h2>
+      <div class="controls-actions-group">
+        <input type="text" class="search-input" placeholder="Search for everything" />
+        <select class="status-select"><option>Status</option></select>
+        <button class="create-portfolio-btn" type="button" (click)="openCreateForm()">+ Create Portfolio</button>
+      </div>
     </div>
-  </div>
 
-  <!-- 📊 الجدول الهندسي المنظم والمطابق لبيانات الـ Swagger الحية تماماً الحين -->
-  <div class="table-responsive-container">
-    <table class="figma-data-table">
-      <thead>
-        <tr>
-          <th>Portfolio Name</th>
-          <th>Description</th>
-          <th>Manager Email</th>
-          <th>Projects Count</th>
-          <th>Owner Email</th>
-          <th>Status</th>
-          <th>Budget</th>
-        </tr>
-      </thead>
+    <div class="table-responsive-container">
+      <table class="figma-data-table">
+        <thead>
+          <tr>
+            <th>Portfolio Name</th>
+            <th>Description</th>
+            <th>Manager Name</th>
+            <th>Projects Count</th>
+            <th>Owner Email</th>
+            <th>Status</th>
+            <th>Budget</th>
+          </tr>
+        </thead>
+        
+        <tbody *ngIf="!isLoading && portfoliosList.length > 0">
+          <tr *ngFor="let item of portfoliosList">
+            <td class="primary-cell-text">{{ item.name }}</td>
+            <td>{{ item.description || 'No Description Available' }}</td>
+            <td>{{ item.managerName || 'Not Assigned' }}</td>
+            <td class="bold-cell-num">{{ item.projectsCount }}</td>
+            <td>{{ item.ownerName }}</td>
+            <td>
+              <span class="status-badge-pill" [class.on-track]="item.status === null">
+                {{ item.status || 'Active' }}
+              </span>
+            </td>
+            <td class="bold-cell-num" style="color: #1e3a8a;">
+              {{ item.budget | number }} SAR
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="center-empty-state-container" *ngIf="isLoading">
+      <h3 class="empty-state-heading">Loading Live Database Records...</h3>
+      <p class="empty-state-paragraph">Please wait while pulling clean portfolio datasets from etmam.store server assets.</p>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isCreateMode">
+    <div class="create-portfolio-container">
       
-      <!-- حقن وتفجير البيانات الحقيقية أونلاين القادمة من قاعدة البيانات -->
-      <tbody *ngIf="!isLoading && portfoliosList.length > 0">
-        <tr *ngFor="let item of portfoliosList">
-          <td class="primary-cell-text">{{ item.name }}</td>
-          <td>{{ item.description || 'No Description Available' }}</td>
-          <td>{{ item.managerName }}</td>
-          <td class="bold-cell-num">{{ item.projectsCount }}</td>
-          <td>{{ item.ownerName }}</td>
-          <td>
-            <span class="status-badge-pill" [class.on-track]="item.status === null">
-              {{ item.status || 'Active' }}
-            </span>
-          </td>
-          <td class="bold-cell-num" style="color: #1e3a8a;">
-            {{ item.budget | number }} SAR
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <div class="form-navigation-header">
+        <h3 class="form-main-title">Portfolios</h3>
+        <span class="form-breadcrumb-sub">Portfolios / Create New</span>
+      </div>
 
-  <!-- مؤشر التحميل الصافي لحماية تجربة العميل -->
-  <div class="center-empty-state-container" *ngIf="isLoading">
-    <h3 class="empty-state-heading">Loading Live Database Records...</h3>
-    <p class="empty-state-paragraph">Please wait while pulling clean portfolio datasets from etmam.store server assets.</p>
-  </div>
+      <form class="portfolio-dynamic-form">
+        
+        <div class="form-input-group">
+          <label class="field-custom-label">Portfolio Name</label>
+          <input type="text" class="field-custom-input" placeholder="Write Here" />
+        </div>
+
+        <div class="form-input-group">
+          <label class="field-custom-label">Budget</label>
+          <input type="text" class="field-custom-input" placeholder="00.0" />
+        </div>
+
+        <div class="form-input-group">
+          <label class="field-custom-label">Portfolio Category</label>
+          <div class="select-wrapper-icon">
+            <select class="field-custom-select">
+              <option>Execution</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-input-group">
+          <label class="field-custom-label">Portfolio Owner</label>
+          <div class="select-wrapper-icon">
+            <select class="field-custom-select">
+              <option>👤 Faisal Al-Otaibi</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-input-group">
+          <label class="field-custom-label">Portfolio Sponsor</label>
+          <div class="select-wrapper-icon">
+            <select class="field-custom-select">
+              <option>👤 Omar Al-Harbi</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-input-group">
+          <label class="field-custom-label">Portfolio Manager</label>
+          <div class="select-wrapper-icon">
+            <select class="field-custom-select">
+              <option>👤 Mahmoud Salah</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-input-group full-width-field">
+          <label class="field-custom-label">Description</label>
+          <textarea class="field-custom-textarea" placeholder="Write Here"></textarea>
+        </div>
+
+        <div class="form-input-group full-width-field">
+          <label class="field-custom-label">Attach File</label>
+          <div class="attachment-dual-zone">
+            
+            <div class="drag-drop-area-box">
+              <div class="cloud-upload-icon-blue">📁</div>
+              <p class="drag-zone-text-primary">Drag your file(s) to start uploading</p>
+              <span class="drag-zone-text-separator">OR</span>
+              <button type="button" class="upload-trigger-action-btn">📤 Upload</button>
+              <p class="drag-zone-text-restrictions">You can upload up to 5 files max<br>Only support .jpg, .png, .svg and .zip files</p>
+            </div>
+
+            <div class="empty-attachment-preview-box">
+              <div class="no-file-alert-icon">❌</div>
+              <p class="no-file-text-indicator">No Attachment</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="form-actions-footer-row">
+          <button type="button" class="form-cancel-dismiss-btn" (click)="closeCreateForm()">❌ Cancel</button>
+          <button type="submit" class="form-submit-success-btn">✨ Add New</button>
+        </div>
+
+      </form>
+    </div>
+  </ng-container>
+
 </div>

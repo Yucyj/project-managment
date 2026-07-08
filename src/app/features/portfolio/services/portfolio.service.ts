@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-
 export interface PortfolioItem {
   id: number;
   name: string;
@@ -15,15 +14,14 @@ export interface PortfolioItem {
   sponsorName: string;
   managerName: string;
   statusProjects: string | null;
-  attachments: string[];
+  attachments: any[];
 }
 
 export interface SwaggerApiResponse {
   succeeded: boolean;
   status: number;
   message: string;
-  data: PortfolioItem[]; // 
-  error: any;
+  data: PortfolioItem[]; 
 }
 
 @Injectable({
@@ -32,10 +30,11 @@ export interface SwaggerApiResponse {
 export class PortfolioService {
   private http = inject(HttpClient);
   
- 
-  private apiUrl = 'https://etmam.store/Isa/api/portfolio/getAll-protfolios';
+  // 🌟 هنا قمنا بإضافة /isa بدقة بناءً على عنوان السواجر لضمان توجيه الطلب بشكل صحيح
+  private baseUrl = 'https://etmam.store/Isa'; 
 
   getAllPortfolios(): Observable<SwaggerApiResponse> {
-    return this.http.get<SwaggerApiResponse>(this.apiUrl);
+    // ندمج الـ baseUrl مع المسار المكتوب في السواجر (لاحظ كلمة getAll-protfolios بإملائها الخاص بالخلفية)
+    return this.http.get<SwaggerApiResponse>(`${this.baseUrl}/api/portfolio/getAll-protfolios`);
   }
 }

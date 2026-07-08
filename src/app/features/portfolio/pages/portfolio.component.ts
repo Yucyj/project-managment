@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortfolioService, PortfolioItem, SwaggerApiResponse } from '../services/portfolio.service';
 
@@ -11,9 +11,13 @@ import { PortfolioService, PortfolioItem, SwaggerApiResponse } from '../services
 })
 export class PortfolioComponent implements OnInit {
   private portfolioService = inject(PortfolioService);
+  private cdr = inject(ChangeDetectorRef);
   
   portfoliosList: PortfolioItem[] = [];
   isLoading = true;
+  
+  // 🌟 علم شرطي للتحكم في عرض النموذج أو الجدول
+  isCreateMode = false; 
 
   ngOnInit(): void {
     this.fetchLivePortfolios();
@@ -23,23 +27,32 @@ export class PortfolioComponent implements OnInit {
     this.isLoading = true;
     this.portfolioService.getAllPortfolios().subscribe({
       next: (response: SwaggerApiResponse) => {
-        console.log('Raw Response from Server captured:', response);
-        
         if (response && response.succeeded) {
-          // 🚀 كسر عناد حالة الأحرف: فحص وتأمين قراءة المصفوفة الحية سواء رجعت 'data' سمول أو 'Data' كابيتال
           const liveData = response.data || (response as any).Data;
-          
           if (liveData && Array.isArray(liveData)) {
             this.portfoliosList = liveData;
           }
         }
         this.isLoading = false;
-        console.log('Successfully connected and populated table array:', this.portfoliosList);
+        this.cdr.detectChanges();
       },
       error: (err: any) => {
         console.error('API Pipeline Connection Failure:', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  // 🌟 دالة لتفعيل وضع إنشاء نموذج جديد
+  openCreateForm(): void {
+    this.isCreateMode = true;
+    this.cdr.detectChanges();
+  }
+
+  // 🌟 دالة للعودة إلى وضع استعراض الجدول
+  closeCreateForm(): void {
+    this.isCreateMode = false;
+    this.cdr.detectChanges();
   }
 }
