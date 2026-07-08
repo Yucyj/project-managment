@@ -1,12 +1,13 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms'; 
+import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 import { PortfolioService, PortfolioItem, SwaggerApiResponse, RoleDropdownItem, DropdownUser } from '../services/portfolio.service';
 
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule], 
+  // 🌟 أضفنا الـ FormsModule هنا لتفعيل ميزة التصفية الحية الثنائية الربط
+  imports: [CommonModule, ReactiveFormsModule, FormsModule], 
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css'
 })
@@ -23,9 +24,10 @@ export class PortfolioComponent implements OnInit {
   ownersList: DropdownUser[] = [];
   sponsorsList: DropdownUser[] = [];
   managersList: DropdownUser[] = [];
-
-  // 🌟 مصفوفة لتخزين أسماء الملفات المرفوعة حياً
   uploadedFiles: string[] = [];
+
+  // 🌟 متغير البحث الحي لالتقاط كلمات المستخدم أثناء الكتابة
+  searchQuery: string = '';
 
   portfolioForm!: FormGroup;
 
@@ -45,6 +47,23 @@ export class PortfolioComponent implements OnInit {
       sponsorId: ['', [Validators.required]],
       managerId: ['', [Validators.required]],
       attachments: [[]]
+    });
+  }
+
+  // 🚀 دالة تصفية مصفوفة البيانات حياً بناءً على مدخلات حقل البحث
+  get filteredPortfolios(): PortfolioItem[] {
+    if (!this.searchQuery || this.searchQuery.trim() === '') {
+      return this.portfoliosList; // إذا كان الحقل فارغاً، يعرض كافة المحافظ
+    }
+    
+    const query = this.searchQuery.toLowerCase().trim();
+    
+    return this.portfoliosList.filter(item => {
+      return (
+        (item.name && item.name.toLowerCase().includes(query)) ||
+        (item.description && item.description.toLowerCase().includes(query)) ||
+        (item.managerName && item.managerName.toLowerCase().includes(query))
+      );
     });
   }
 
@@ -74,30 +93,23 @@ export class PortfolioComponent implements OnInit {
       next: (response: SwaggerApiResponse) => {
         if (response && response.succeeded && Array.isArray(response.data)) {
           const roles: RoleDropdownItem[] = response.data;
-          
           const managerRole = roles.find(r => r.name === 'Manager');
           if (managerRole) this.managersList = managerRole.users;
-
           const sponsorRole = roles.find(r => r.name === 'Sponser');
           if (sponsorRole) this.sponsorsList = sponsorRole.users;
-
           const ownerRole = roles.find(r => r.name === 'Owner');
           if (ownerRole) this.ownersList = ownerRole.users;
         }
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Failed to load dynamic dropdown assets:', err);
-      }
+      error: (err) => console.error('Failed to load dynamic dropdown assets:', err)
     });
   }
 
-  // 🚀 معالج حدث رفع الملفات الحقيقي واختياره من الكمبيوتر
   onFileSelected(event: any): void {
     const files = event.target.files;
     if (files && files.length > 0) {
       for (let i = 0; i < files.length; i++) {
-        // نأخذ اسم الملف وامتداده الفعلي لتغذية طلب السيرفر بدقة
         this.uploadedFiles.push(files[i].name);
       }
       this.cdr.detectChanges();
@@ -106,7 +118,7 @@ export class PortfolioComponent implements OnInit {
 
   openCreateForm(): void {
     this.portfolioForm.reset({ id: 0, budget: 0, ownerId: '', sponsorId: '', managerId: '', attachments: [] });
-    this.uploadedFiles = []; // تصفير الملفات عند فتح نموذج جديد
+    this.uploadedFiles = [];
     this.isCreateMode = true;
     this.cdr.detectChanges();
   }
@@ -121,15 +133,11 @@ export class PortfolioComponent implements OnInit {
       alert('Please fill in all required fields properly.');
       return;
     }
-
-    // 🌟 تأمين وجود ملف مرفق واحد على الأقل إذا كان السيرفر يشترط عدم إرسال حقول الرفع فارغة
     if (this.uploadedFiles.length === 0) {
       this.uploadedFiles.push("default_portfolio_attachment.pdf");
     }
-
     this.isSubmitting = true;
     const formValues = this.portfolioForm.value;
-
     const finalPayload = {
       id: 0,
       name: formValues.name,
@@ -138,7 +146,7 @@ export class PortfolioComponent implements OnInit {
       ownerId: formValues.ownerId,
       sponsorId: formValues.sponsorId,
       managerId: formValues.managerId,
-      attachments: this.uploadedFiles // تمرير أسماء الملفات الحقيقية المرفوعة بالملي!
+      attachments: this.uploadedFiles
     };
 
     this.portfolioService.createPortfolio(finalPayload).subscribe({
@@ -155,11 +163,6 @@ export class PortfolioComponent implements OnInit {
       },
       error: (err) => {
         console.error('Database rejection logs:', err);
-        if (err.error && err.error.message) {
-          alert(`Server Rejected: ${err.error.message}`);
-        } else {
-          alert('User session not authenticated. Make sure token is saved correctly.');
-        }
         this.isSubmitting = false;
         this.cdr.detectChanges();
       }

@@ -27,13 +27,14 @@
     <div class="table-controls-row">
       <h2 class="section-heading-title">All portfolios</h2>
       <div class="controls-actions-group">
-        <input type="text" class="search-input" placeholder="Search for everything" />
+        <!-- 🌟 تفعيل حقل البحث الحي بربط ثنائي الاتجاه يقرأ حركياً أثناء الكتابة -->
+        <input type="text" class="search-input" placeholder="Search for everything" [(ngModel)]="searchQuery" />
         <select class="status-select"><option>Status</option></select>
         <button class="create-portfolio-btn" type="button" (click)="openCreateForm()">+ Create Portfolio</button>
       </div>
     </div>
 
-    <!-- جدول عرض البيانات الأساسي المستقر القادم من السيرفر -->
+    <!-- جدول عرض البيانات الأساسي المستقر المربوط بالمصفوفة المفلترة الحية -->
     <div class="table-responsive-container">
       <table class="figma-data-table">
         <thead>
@@ -47,8 +48,9 @@
             <th>Budget</th>
           </tr>
         </thead>
-        <tbody *ngIf="!isLoading && portfoliosList.length > 0">
-          <tr *ngFor="let item of portfoliosList">
+        <!-- 🌟 تم تحويل الحيازة البرمجية لتقرأ مباشرة من دالة الفرز filteredPortfolios -->
+        <tbody *ngIf="!isLoading && filteredPortfolios.length > 0">
+          <tr *ngFor="let item of filteredPortfolios">
             <td class="primary-cell-text">{{ item.name }}</td>
             <td>{{ item.description || 'No Description Available' }}</td>
             <td>{{ item.managerName || 'Not Assigned' }}</td>
@@ -83,7 +85,7 @@
         <span class="form-breadcrumb-sub">Portfolios / Create New</span>
       </div>
 
-      <!-- 🌟 تم تصحيح الرابط البرمجي وإضافة علامة الـ (=) لربط دالة الإرسال بدقة وعمق -->
+      <!-- ربط عناصر الإرسال بالفورم والـ Controls المعتمدة لتفادي الـ 400 -->
       <form [formGroup]="portfolioForm" (ngSubmit)="onSavePortfolio()" class="portfolio-dynamic-form">
         
         <!-- حقل اسم المحفظة -->
@@ -205,6 +207,4 @@
         </div>
 
         <!-- شريط أزرار العمليات والتخزين الحقيقي الفعال في أسفل شاشة النموذج -->
-        <div class="form-actions-footer-row">
-          <button type="button" class="form-cancel-dismiss-btn" (click)="closeCreateForm()">Cancel</button>
-          <button type="submit" [disabled]="isSubmitting" class="form-submit-success-btn">{{ isSubmitting ? 'Saving...' : 'Add New' }}
+            <button type="button" class="form-cancel-dismiss-btn" (click)="closeCreateForm()">Cancel<button type="submit" [disabled]="isSubmitting" class="form-submit-success-btn">{{ isSubmitting ? 'Saving...' : 'Add New' }}
