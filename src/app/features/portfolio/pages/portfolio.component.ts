@@ -8,7 +8,8 @@ import { PortfolioService, PortfolioItem, SwaggerApiResponse, RoleDropdownItem, 
   selector: 'app-portfolio',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule], 
-  templateUrl: './portfolio.component.html',
+  // 🌟 تصحيح مسار الـ Template ليعود قياسياً بنقطة واحدة فقط لمنع خطأ NG2008
+  templateUrl: './portfolio.component.html', 
   styleUrl: './portfolio.component.css'
 })
 export class PortfolioComponent implements OnInit {
@@ -121,8 +122,13 @@ export class PortfolioComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // 🚀 دالة الحذف المباشر والسريع من صفوف الجدول عبر ترويسة الطلب
-  onInlineDeleteClick(portfolioId: number): void {
+  // 🌟 معالجة صارمة لقبول الرقم وحذف احتمالية الـ undefined تماماً لحل خطأ TS2345 قاطعاً
+  onInlineDeleteClick(portfolioId: number | undefined): void {
+    if (portfolioId === undefined) {
+      alert('Error: Portfolio ID is missing.');
+      return;
+    }
+
     const confirmation = confirm('Are you sure you want to delete this portfolio permanently from table row?');
     if (!confirmation) return;
 
@@ -130,7 +136,7 @@ export class PortfolioComponent implements OnInit {
       next: (res: SwaggerApiResponse) => {
         if (res && res.succeeded) {
           alert('Portfolio removed successfully! 🗑️');
-          this.fetchLivePortfolios(); // تحديث فوري وسحب القائمة مجدداً لرؤية اختفاء السطر حياً
+          this.fetchLivePortfolios(); 
         } else {
           alert('Failed to delete: ' + res.message);
         }
@@ -140,7 +146,8 @@ export class PortfolioComponent implements OnInit {
   }
 
   openCreateForm(): void {
-    this.portfolioForm.reset({ id: 0, budget: 0, ownerId: '', sponsorId: '', managerId: '', attachments: [] });
+    this.portfolioForm.reset();
+    this.portfolioForm.patchValue({ id: 0, budget: 0, ownerId: '', sponsorId: '', managerId: '', attachments: [] });
     this.uploadedFiles = [];
     this.isEditMode = false;
     this.isCreateMode = true;
@@ -149,6 +156,7 @@ export class PortfolioComponent implements OnInit {
   }
 
   closeCreateForm(): void {
+    this.portfolioForm.reset();
     this.isCreateMode = false;
     this.isEditMode = false;
     this.currentEditingId = null;
@@ -165,7 +173,7 @@ export class PortfolioComponent implements OnInit {
     const formValues = this.portfolioForm.value;
 
     const finalPayload = {
-      id: this.isEditMode ? this.currentEditingId : 0, 
+      id: this.isEditMode ? Number(this.currentEditingId) : 0, 
       name: formValues.name,
       budget: Number(formValues.budget),
       description: formValues.description || "No Description Provided",
