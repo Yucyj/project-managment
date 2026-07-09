@@ -84,6 +84,22 @@ export class PortfolioService {
     return this.http.get<SwaggerApiResponse>(`${this.baseUrl}/api/portfolio/details?id=${id}&pageSize=${pageSize}&pageNom=${pageNom}`);
   }
 
+  // 🚀 دالة الحذف الجديدة لتمرير معرف المحفظة والتوكن المعتمد سوياً بداخل الترويسة بالملي
+  deletePortfolio(portfolioId: number): Observable<SwaggerApiResponse> {
+    const token = localStorage.getItem('token') || localStorage.getItem('accessToken') || ''; 
+    
+    const headers = new HttpHeaders({
+      'accept': '*/*',
+      'id': portfolioId.toString(), // السيرفر يقرأه كنص من الـ Header
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.delete<SwaggerApiResponse>(
+      `${this.baseUrl}/api/portfolio/Delete-protfolio`, 
+      { headers }
+    );
+  }
+
   // معالج الإرسال النهائي المحمي ضد الـ 400
   createPortfolio(portfolioData: any): Observable<SwaggerApiResponse> {
     
@@ -111,4 +127,20 @@ export class PortfolioService {
       { headers }
     );
   }
+  updatePortfolio(portfolioData: any): Observable<SwaggerApiResponse> {
+  const token = localStorage.getItem('token') || localStorage.getItem('accessToken') || ''; 
+  
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'accept': '*/*',
+    'Authorization': `Bearer ${token}`
+  });
+
+  // 🚀 استهلاك مسار الـ PUT القياسي المتوافق مع السواجر الفعلي بالملي
+  return this.http.put<SwaggerApiResponse>(
+    `${this.baseUrl}/api/portfolio/Update-protfolio`, 
+    portfolioData,
+    { headers }
+  );
+}
 }
