@@ -1,9 +1,7 @@
 <div class="portfolio-wrapper">
   
-  <!-- 1️⃣ وضع استعراض البيانات والجدول الرئيسي -->
   <ng-container *ngIf="!isCreateMode">
     
-    <!-- العدادات الذكية العلوية -->
     <div class="portfolio-summary-grid">
       <div class="summary-card">
         <span class="card-title-text">Total Portfolio</span>
@@ -23,7 +21,6 @@
       </div>
     </div>
 
-    <!-- شريط البحث والتحكم العلوي للجدول الرئيسي -->
     <div class="table-controls-row">
       <h2 class="section-heading-title">All portfolios</h2>
       <div class="controls-actions-group">
@@ -33,7 +30,6 @@
       </div>
     </div>
 
-    <!-- جدول عرض البيانات الأساسي المستقر القادم من السيرفر مضافاً إليه العين -->
     <div class="table-responsive-container">
       <table class="figma-data-table">
         <thead>
@@ -45,7 +41,7 @@
             <th>Owner Email</th>
             <th>Status</th>
             <th>Budget</th>
-            <th style="text-align: center;">Actions</th>
+            <th style="text-align: center; width: 120px;">Actions</th>
           </tr>
         </thead>
         <tbody *ngIf="!isLoading && filteredPortfolios.length > 0">
@@ -63,11 +59,24 @@
             <td class="bold-cell-num" style="color: #1e3a8a;">
               {{ item.budget | number }} SAR
             </td>
-            <td style="text-align: center;">
-              <button type="button" [routerLink]="['/portfolio/details', item.id]" class="view-details-eye-btn" style="background: none; border: none; cursor: pointer; padding: 4px; color: #0f2d59;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
+            
+            <td style="text-align: center; display: flex; gap: 8px; justify-content: center; align-items: center; border-bottom: none; height: 53px;">
+              <button type="button" [routerLink]="['/portfolio/details', item.id]" class="table-action-icon-btn view-eye-btn" title="View Details">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button type="button" (click)="onEditPortfolioClick(item)" class="table-action-icon-btn edit-pen-btn" title="Edit Portfolio">
+                <svg width="15" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path>
+                </svg>
+              </button>
+              <button type="button" (click)="onInlineDeleteClick(item.id)" class="table-action-icon-btn delete-trash-btn" title="Delete Portfolio">
+                <svg width="15" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                 </svg>
               </button>
             </td>
@@ -78,17 +87,16 @@
 
     <div class="center-empty-state-container" *ngIf="isLoading">
       <h3 class="empty-state-heading">Loading Live Database Records...</h3>
-      <p class="empty-state-paragraph">Please wait while pulling clean portfolio datasets from etmam.store server assets.</p>
+      <p class="empty-state-paragraph">Please wait while pulling clean portfolio datasets.</p>
     </div>
   </ng-container>
 
-  <!-- 2️⃣ نموذج إنشاء محفظة جديدة مطابق لتوقعات السيرفر لمنع البياض -->
   <ng-container *ngIf="isCreateMode">
     <div class="create-portfolio-container">
       
       <div class="form-navigation-header">
-        <h3 class="form-main-title">Create New Portfolio</h3>
-        <span class="form-breadcrumb-sub">Portfolios / Create New</span>
+        <h3 class="form-main-title">{{ isEditMode ? 'Update Portfolio' : 'Create New Portfolio' }}</h3>
+        <span class="form-breadcrumb-sub">Portfolios / {{ isEditMode ? 'Update Existing' : 'Create New' }}</span>
       </div>
 
       <form [formGroup]="portfolioForm" (ngSubmit)="onSavePortfolio()" class="portfolio-dynamic-form">
@@ -115,43 +123,31 @@
 
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Owner</label>
-          <div class="input-with-icon-wrapper dropdown-arrow">
-            <select formControlName="ownerId" class="field-custom-select">
-              <option value="">Select owner</option>
-              <option *ngFor="let user of ownersList" [value]="user.id">{{ user.fullName }}</option>
-            </select>
-          </div>
+          <select formControlName="ownerId" class="field-custom-select">
+            <option value="">Select owner</option>
+            <option *ngFor="let user of ownersList" [value]="user.id">{{ user.fullName }}</option>
+          </select>
         </div>
 
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Sponsor</label>
-          <div class="input-with-icon-wrapper dropdown-arrow">
-            <select formControlName="sponsorId" class="field-custom-select">
-              <option value="">Select sponsor</option>
-              <option *ngFor="let user of sponsorsList" [value]="user.id">{{ user.fullName }}</option>
-            </select>
-          </div>
+          <select formControlName="sponsorId" class="field-custom-select">
+            <option value="">Select sponsor</option>
+            <option *ngFor="let user of sponsorsList" [value]="user.id">{{ user.fullName }}</option>
+          </select>
         </div>
 
         <div class="form-input-group">
           <label class="field-custom-label">Portfolio Manager</label>
-          <div class="input-with-icon-wrapper dropdown-arrow">
-            <select formControlName="managerId" class="field-custom-select">
-              <option value="">Select manager</option>
-              <option *ngFor="let user of managersList" [value]="user.id">{{ user.fullName }}</option>
-            </select>
-          </div>
+          <select formControlName="managerId" class="field-custom-select">
+            <option value="">Select manager</option>
+            <option *ngFor="let user of managersList" [value]="user.id">{{ user.fullName }}</option>
+          </select>
         </div>
 
         <div class="form-input-group">
           <label class="field-custom-label">Description</label>
           <textarea formControlName="description" class="field-custom-textarea" placeholder="Deleniti quasi provi"></textarea>
-        </div>
-
-        <div class="form-input-group text-alert-placeholder-zone">
-          <div class="system-no-users-alert-box">
-            <span class="alert-inline-text">No users found</span>
-          </div>
         </div>
 
         <div class="form-input-group full-width-field">
@@ -160,32 +156,38 @@
             <div class="drag-drop-area-box" style="position: relative;">
               <input type="file" multiple (change)="onFileSelected($event)" style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; top: 0; left: 0; z-index: 10;" />
               <div class="custom-svg-cloud-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org"><path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#0f2d59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15" stroke="#0f2d59" stroke-width="2" stroke-linecap="round"/></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org"><path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#0f2d59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 17.8284 21 15" stroke="#0f2d59" stroke-width="2" stroke-linecap="round"/></svg>
               </div>
               <p class="drag-zone-text-primary">Drag your file(s) to start uploading</p>
               <span class="drag-zone-text-separator">OR</span>
               <button type="button" class="upload-trigger-action-btn">Upload</button>
-              <p class="drag-zone-text-restrictions">You can upload up to 5 files max</p>
             </div>
+            
             <div class="empty-attachment-preview-box">
               <div class="custom-svg-error-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org"><rect x="4" y="2" width="16" height="20" rx="2" [attr.stroke]="uploadedFiles.length > 0 ? '#0f2d59' : '#cbd5e1'" stroke-width="2"/><path d="M12 18H8M16 14H8M16 10H8" [attr.stroke]="uploadedFiles.length > 0 ? '#0f2d59' : '#cbd5e1'" stroke-width="2" stroke-linecap="round"/></svg>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org">
+                  <rect x="4" y="2" width="16" height="20" rx="2" [attr.stroke]="uploadedFiles.length > 0 ? '#0f2d59' : '#cbd5e1'" stroke-width="2"/>
+                  <path d="M12 18H8M16 14H8M16 10H8" [attr.stroke]="uploadedFiles.length > 0 ? '#0f2d59' : '#cbd5e1'" stroke-width="2" stroke-linecap="round"/>
+                </svg>
               </div>
+
               <div *ngIf="uploadedFiles.length > 0" style="width: 100%; max-height: 80px; overflow-y: auto; text-align: center; padding: 4px;">
                 <div *ngFor="let file of uploadedFiles" style="font-size: 12px; color: #0f2d59; font-weight: 600; margin-bottom: 4px;">📄 {{ file }}</div>
               </div>
+
               <p class="no-file-text-indicator" *ngIf="uploadedFiles.length === 0">No Attachment</p>
             </div>
           </div>
         </div>
 
-        <div class="form-actions-footer-row">
+        <div class="form-actions-footer" style="display: flex; gap: 10px; margin-top: 20px;">
           <button type="button" class="form-cancel-dismiss-btn" (click)="closeCreateForm()">Cancel</button>
-          <button type="submit" [disabled]="isSubmitting" class="form-submit-success-btn">{{ isSubmitting ? 'Saving...' : 'Add New' }}</button>
+          <button type="submit" [disabled]="isSubmitting" class="form-submit-success-btn">
+            {{ isSubmitting ? 'Processing...' : (isEditMode ? 'Update' : 'Add New') }}
+          </button>
         </div>
 
       </form>
     </div>
   </ng-container>
-
 </div>

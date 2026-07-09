@@ -360,3 +360,20 @@
   font-weight: 600 !important;
   cursor: pointer;
 }
+
+.table-action-icon-btn {
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 4px !important;
+  transition: transform 0.2s ease, color 0.2s ease !important;
+}
+
+.view-eye-btn { color: #0f2d59 !important; }
+.view-eye-btn:hover { transform: scale(1.2) !important; color: #2563eb !important; }
+
+.edit-pen-btn { color: #475569 !important; }
+.edit-pen-btn:hover { transform: scale(1.2) !important; color: #0f2d59 !important; }
+
+.delete-trash-btn { color: #94a3b8 !important; }
+.delete-trash-btn:hover { transform: scale(1.2) !important; color: #dc2626 !important; }

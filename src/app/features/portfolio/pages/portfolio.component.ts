@@ -1,13 +1,12 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms'; 
-import { RouterModule } from '@angular/router'; // 🌟 حقن موديول التوجيه لتفعيل أزرار العين والتفاصيل
+import { RouterModule } from '@angular/router'; 
 import { PortfolioService, PortfolioItem, SwaggerApiResponse, RoleDropdownItem, DropdownUser } from '../services/portfolio.service';
 
 @Component({
   selector: 'app-portfolio',
   standalone: true,
-  // 🌟 إضافة الـ RouterModule هنا لحماية [routerLink] قاطعاً في الـ HTML
   imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule], 
   templateUrl: './portfolio.component.html',
   styleUrl: './portfolio.component.css'
@@ -20,13 +19,14 @@ export class PortfolioComponent implements OnInit {
   portfoliosList: PortfolioItem[] = [];
   isLoading = true;
   isCreateMode = false;
+  isEditMode = false; 
   isSubmitting = false; 
+  currentEditingId: number | null = null; 
   
   ownersList: DropdownUser[] = [];
   sponsorsList: DropdownUser[] = [];
   managersList: DropdownUser[] = [];
   uploadedFiles: string[] = [];
-
   searchQuery: string = '';
 
   portfolioForm!: FormGroup;
@@ -37,7 +37,6 @@ export class PortfolioComponent implements OnInit {
     this.initPortfolioForm();
   }
 
-  // 🌟 تم إغلاق القوس المكسور والدالة هنا بالملي للتخلص من الأخطاء السابقة قاطعاً
   initPortfolioForm(): void {
     this.portfolioForm = this.fb.group({
       id: 0, 
@@ -51,14 +50,11 @@ export class PortfolioComponent implements OnInit {
     });
   }
 
-  // دالة تصفية مصفوفة البيانات حياً بناءً على مدخلات حقل البحث
   get filteredPortfolios(): PortfolioItem[] {
     if (!this.searchQuery || this.searchQuery.trim() === '') {
       return this.portfoliosList;
     }
-    
     const query = this.searchQuery.toLowerCase().trim();
-    
     return this.portfoliosList.filter(item => {
       return (
         (item.name && item.name.toLowerCase().includes(query)) ||
@@ -94,19 +90,113 @@ export class PortfolioComponent implements OnInit {
       next: (response: SwaggerApiResponse) => {
         if (response && response.succeeded && Array.isArray(response.data)) {
           const roles: RoleDropdownItem[] = response.data;
-          
           const managerRole = roles.find(r => r.name === 'Manager');
           if (managerRole) this.managersList = managerRole.users;
-
           const sponsorRole = roles.find(r => r.name === 'Sponser');
           if (sponsorRole) this.sponsorsList = sponsorRole.users;
-
           const ownerRole = roles.find(r => r.name === 'Owner');
           if (ownerRole) this.ownersList = ownerRole.users;
         }
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Failed to load dynamic dropdown assets:', err)
+    });
+  }
+
+  onEditPortfolioClick(item: any): void {
+    this.isEditMode = true;
+    this.isCreateMode = true; 
+    this.currentEditingId = item.id;
+
+    this.portfolioForm.patchValue({
+      id: item.id,
+      name: item.name,
+      budget: item.budget,
+      description: item.description,
+      ownerId: item.ownerId || '',
+      sponsorId: item.sponsorId || '',
+      managerId: item.managerId || ''
+    });
+    this.uploadedFiles = item.attachments || [];
+    this.cdr.detectChanges();
+  }
+
+  // 🚀 دالة الحذف المباشر والسريع من صفوف الجدول عبر ترويسة الطلب
+  onInlineDeleteClick(portfolioId: number): void {
+    const confirmation = confirm('Are you sure you want to delete this portfolio permanently from table row?');
+    if (!confirmation) return;
+
+    this.portfolioService.deletePortfolio(portfolioId).subscribe({
+      next: (res: SwaggerApiResponse) => {
+        if (res && res.succeeded) {
+          alert('Portfolio removed successfully! 🗑️');
+          this.fetchLivePortfolios(); // تحديث فوري وسحب القائمة مجدداً لرؤية اختفاء السطر حياً
+        } else {
+          alert('Failed to delete: ' + res.message);
+        }
+      },
+      error: (err: any) => console.error('Inline erasure failure:', err)
+    });
+  }
+
+  openCreateForm(): void {
+    this.portfolioForm.reset({ id: 0, budget: 0, ownerId: '', sponsorId: '', managerId: '', attachments: [] });
+    this.uploadedFiles = [];
+    this.isEditMode = false;
+    this.isCreateMode = true;
+    this.currentEditingId = null;
+    this.cdr.detectChanges();
+  }
+
+  closeCreateForm(): void {
+    this.isCreateMode = false;
+    this.isEditMode = false;
+    this.currentEditingId = null;
+    this.cdr.detectChanges();
+  }
+
+  onSavePortfolio(): void {
+    if (this.portfolioForm.invalid) {
+      alert('Please fill in all required fields properly.');
+      return;
+    }
+
+    this.isSubmitting = true;
+    const formValues = this.portfolioForm.value;
+
+    const finalPayload = {
+      id: this.isEditMode ? this.currentEditingId : 0, 
+      name: formValues.name,
+      budget: Number(formValues.budget),
+      description: formValues.description || "No Description Provided",
+      ownerId: formValues.ownerId,
+      sponsorId: formValues.sponsorId,
+      managerId: formValues.managerId,
+      attachments: this.uploadedFiles.length > 0 ? this.uploadedFiles : ["default_portfolio_attachment.pdf"]
+    };
+
+    const apiCall = this.isEditMode 
+      ? this.portfolioService.updatePortfolio(finalPayload) 
+      : this.portfolioService.createPortfolio(finalPayload);
+
+    apiCall.subscribe({
+      next: (res) => {
+        if (res && res.succeeded) {
+          alert(this.isEditMode ? 'Portfolio updated successfully! ✏️' : 'Portfolio created successfully! 🎉');
+          this.isCreateMode = false;
+          this.isEditMode = false;
+          this.fetchLivePortfolios(); 
+        } else {
+          alert('Server validation note: ' + res.message);
+        }
+        this.isSubmitting = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Database modification logs failure:', err);
+        this.isSubmitting = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -118,59 +208,5 @@ export class PortfolioComponent implements OnInit {
       }
       this.cdr.detectChanges();
     }
-  }
-
-  openCreateForm(): void {
-    this.portfolioForm.reset({ id: 0, budget: 0, ownerId: '', sponsorId: '', managerId: '', attachments: [] });
-    this.uploadedFiles = [];
-    this.isCreateMode = true;
-    this.cdr.detectChanges();
-  }
-
-  closeCreateForm(): void {
-    this.isCreateMode = false;
-    this.cdr.detectChanges();
-  }
-
-  onSavePortfolio(): void {
-    if (this.portfolioForm.invalid) {
-      alert('Please fill in all required fields properly.');
-      return;
-    }
-    if (this.uploadedFiles.length === 0) {
-      this.uploadedFiles.push("default_portfolio_attachment.pdf");
-    }
-    this.isSubmitting = true;
-    const formValues = this.portfolioForm.value;
-    
-    const finalPayload = {
-      id: 0,
-      name: formValues.name,
-      budget: Number(formValues.budget),
-      description: formValues.description || "No Description Provided",
-      ownerId: formValues.ownerId,
-      sponsorId: formValues.sponsorId,
-      managerId: formValues.managerId,
-      attachments: this.uploadedFiles
-    };
-
-    this.portfolioService.createPortfolio(finalPayload).subscribe({
-      next: (res) => {
-        if (res && res.succeeded) {
-          alert('Portfolio created successfully! 🎉');
-          this.isCreateMode = false;
-          this.fetchLivePortfolios(); 
-        } else {
-          alert('Server validation note: ' + (res.message || 'Check database restrictions.'));
-        }
-        this.isSubmitting = false;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Database rejection logs:', err);
-        this.isSubmitting = false;
-        this.cdr.detectChanges();
-      }
-    });
   }
 }
